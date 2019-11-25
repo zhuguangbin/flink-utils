@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.mediav</groupId>
+        <artifactId>adq</artifactId>
+        <version>39</version>
+    </parent>
+
+	<groupId>net.qihoo.ads.flink</groupId>
+	<artifactId>flink-utils</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<scala.binary.version>2.11</scala.binary.version>
+		<scala.version>2.11.12</scala.version>
+		<flink.version>1.9.1</flink.version>
+		<confluent.version>5.3.1</confluent.version>
+	</properties>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-scala_${scala.binary.version}</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-streaming-scala_${scala.binary.version}</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-java</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-table-common</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-avro</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.confluent</groupId>
+			<artifactId>kafka-avro-serializer</artifactId>
+			<version>${confluent.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.flink</groupId>
+			<artifactId>flink-avro-confluent-registry</artifactId>
+			<version>${flink.version}</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>io.confluent</groupId>
+					<artifactId>kafka-schema-registry-client</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+			<!-- Avro records can contain JodaTime fields when using logical fields.
+				In order to handle them, we need to add an optional dependency.
+				Users with those Avro records need to add this dependency themselves. -->
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.thrift</groupId>
+			<artifactId>libthrift</artifactId>
+			<version>0.6.1</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>mediav-releases</id>
+			<name>Releases Repository</name>
+			<url>https://maven.corp.mediav.com/nexus/content/repositories/releases</url>
+		</repository>
+	</repositories>
+
+	<name>Flink Kafka Connector SerDe Schema</name>
+	<url>https://adgit.src.corp.qihoo.net/big-data/flink-kafka-serde.git</url>
+	<inceptionYear>2017</inceptionYear>
+	<organization>
+		<name>Qihoo 360 Technology Co. Ltd. (Qihoo 360)</name>
+		<url>https://360.com/</url>
+	</organization>
+	<scm>
+		<connection>scm:git:https://adgit.src.corp.qihoo.net/big-data/flink-kafka-serde.git</connection>
+		<developerConnection>scm:git:git@adgit.src.corp.qihoo.net:big-data/flink-kafka-serde.git</developerConnection>
+		<url>https://adgit.src.corp.qihoo.net/big-data/flink-kafka-serde</url>
+	</scm>
+	<issueManagement>
+		<system>Redmine</system>
+		<url>https://dev.corp.mediav.com/</url>
+	</issueManagement>
+</project>
