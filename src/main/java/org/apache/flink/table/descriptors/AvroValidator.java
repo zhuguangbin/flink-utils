@@ -30,6 +30,7 @@ public class AvroValidator extends FormatDescriptorValidator {
 	public static final String FORMAT_TYPE_VALUE = "avro";
 	public static final String FORMAT_USE_REGISTRY = "format.use-registry";
 	public static final String FORMAT_REGISTRY_URL = "format.registry-url";
+	public static final String FORMAT_REGISTRY_SUBJECT = "format.registry-subject";
 	public static final String FORMAT_RECORD_CLASS = "format.record-class";
 	public static final String FORMAT_AVRO_SCHEMA = "format.avro-schema";
 

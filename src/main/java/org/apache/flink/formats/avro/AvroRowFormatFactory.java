@@ -48,6 +48,7 @@ public class AvroRowFormatFactory extends TableFormatFactoryBase<Row>
         final List<String> properties = new ArrayList<>();
         properties.add(AvroValidator.FORMAT_USE_REGISTRY);
         properties.add(AvroValidator.FORMAT_REGISTRY_URL);
+        properties.add(AvroValidator.FORMAT_REGISTRY_SUBJECT);
         properties.add(AvroValidator.FORMAT_RECORD_CLASS);
         properties.add(AvroValidator.FORMAT_AVRO_SCHEMA);
         return properties;
@@ -61,10 +62,12 @@ public class AvroRowFormatFactory extends TableFormatFactoryBase<Row>
         if (descriptorProperties.containsKey(AvroValidator.FORMAT_RECORD_CLASS)) {
             return new AvroRowDeserializationSchema(descriptorProperties.getBoolean(AvroValidator.FORMAT_USE_REGISTRY),
                     descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_URL),
+                    descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_SUBJECT),
                     descriptorProperties.getClass(AvroValidator.FORMAT_RECORD_CLASS, SpecificRecord.class));
         } else {
             return new AvroRowDeserializationSchema(descriptorProperties.getBoolean(AvroValidator.FORMAT_USE_REGISTRY),
                     descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_URL),
+                    descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_SUBJECT),
                     descriptorProperties.getString(AvroValidator.FORMAT_AVRO_SCHEMA));
         }
     }
@@ -77,10 +80,12 @@ public class AvroRowFormatFactory extends TableFormatFactoryBase<Row>
         if (descriptorProperties.containsKey(AvroValidator.FORMAT_RECORD_CLASS)) {
             return new AvroRowSerializationSchema(descriptorProperties.getBoolean(AvroValidator.FORMAT_USE_REGISTRY),
                     descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_URL),
+                    descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_SUBJECT),
                     descriptorProperties.getClass(AvroValidator.FORMAT_RECORD_CLASS, SpecificRecord.class));
         } else {
             return new AvroRowSerializationSchema(descriptorProperties.getBoolean(AvroValidator.FORMAT_USE_REGISTRY),
                     descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_URL),
+                    descriptorProperties.getString(AvroValidator.FORMAT_REGISTRY_SUBJECT),
                     descriptorProperties.getString(AvroValidator.FORMAT_AVRO_SCHEMA));
         }
     }

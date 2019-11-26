@@ -32,6 +32,7 @@ public class Avro extends FormatDescriptor {
 
 	private boolean useRegistry;
 	private String registryUrl;
+	private String registrySubject;
 	private Class<? extends SpecificRecord> recordClass;
 	private String avroSchema;
 
@@ -65,6 +66,17 @@ public class Avro extends FormatDescriptor {
 	}
 
 	/**
+	 * Registry subject of schema
+	 * @param registrySubject subject name of schema
+	 * @return
+	 */
+	public Avro registrySubject(String registrySubject) {
+		Preconditions.checkNotNull(registrySubject);
+		this.registrySubject = registrySubject;
+		return this;
+	}
+
+	/**
 	 * Sets the class of the Avro specific record.
 	 *
 	 * @param recordClass class of the Avro record.
@@ -94,6 +106,9 @@ public class Avro extends FormatDescriptor {
 
 		if (null != registryUrl) {
 			properties.putString(AvroValidator.FORMAT_REGISTRY_URL, registryUrl);
+		}
+		if (null != registrySubject) {
+			properties.putString(AvroValidator.FORMAT_REGISTRY_SUBJECT, registrySubject);
 		}
 		if (null != recordClass) {
 			properties.putClass(AvroValidator.FORMAT_RECORD_CLASS, recordClass);

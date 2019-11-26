@@ -17,6 +17,8 @@
 
 package org.apache.flink.formats.avro;
 
+import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import org.apache.avro.LogicalTypes;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -91,6 +93,17 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 	private String registryUrl;
 
 	/**
+	 * the schema subject. when useRegistry, subject is required
+	 */
+
+	private String registrySubject;
+
+	/**
+	 * the schema registry client
+	 */
+	private SchemaRegistryClient schemaRegistry;
+
+	/**
 	 * Avro record class for deserialization. Might be null if record class is not available.
 	 */
 	private Class<? extends SpecificRecord> recordClazz;
@@ -136,13 +149,17 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 	 *
 	 * @param useRegistry whether use schema registry
 	 * @param registryUrl the schema registry url
+	 * @param registrySubject the schema subject
 	 * @param recordClazz Avro record class used to deserialize Avro's record to Flink's row
 	 */
-	public AvroRowDeserializationSchema(boolean useRegistry, String registryUrl, Class<? extends SpecificRecord> recordClazz) {
+	public AvroRowDeserializationSchema(boolean useRegistry, String registryUrl, String registrySubject, Class<? extends SpecificRecord> recordClazz) {
 		this.useRegistry = useRegistry;
 		this.registryUrl = registryUrl;
+		this.registrySubject = registrySubject;
 		if (useRegistry) {
 			Preconditions.checkNotNull(registryUrl, "registryUrl must not be null");
+			Preconditions.checkNotNull(registrySubject, "registrySubject must not be null");
+			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
 		}
 		Preconditions.checkNotNull(recordClazz, "Avro record class must not be null.");
 		this.recordClazz = recordClazz;
@@ -160,13 +177,17 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 	 *
 	 * @param useRegistry whether use schema registry
 	 * @param registryUrl the schema registry url
+	 * @param registrySubject the schema subject
 	 * @param avroSchemaString Avro schema string to deserialize Avro's record to Flink's row
 	 */
-	public AvroRowDeserializationSchema(boolean useRegistry, String registryUrl, String avroSchemaString) {
+	public AvroRowDeserializationSchema(boolean useRegistry, String registryUrl, String registrySubject, String avroSchemaString) {
 		this.useRegistry = useRegistry;
 		this.registryUrl = registryUrl;
+		this.registrySubject = registrySubject;
 		if (useRegistry) {
 			Preconditions.checkNotNull(registryUrl, "registryUrl must not be null");
+			Preconditions.checkNotNull(registrySubject, "registrySubject must not be null");
+			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
 		}
 		Preconditions.checkNotNull(avroSchemaString, "Avro schema must not be null.");
 		recordClazz = null;
@@ -186,7 +207,6 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 		try {
 			if (useRegistry) {
 				ByteBuffer buffer = getByteBuffer(message);
-
 				// TODO: check schema version against registry
 
 				// remove first 5 bytes header
@@ -394,6 +414,7 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 	private void writeObject(ObjectOutputStream outputStream) throws IOException {
 		outputStream.writeBoolean(useRegistry);
 		outputStream.writeUTF(registryUrl);
+		outputStream.writeUTF(registrySubject);
 		outputStream.writeObject(recordClazz);
 		outputStream.writeUTF(schemaString);
 	}
@@ -402,8 +423,10 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 	private void readObject(ObjectInputStream inputStream) throws ClassNotFoundException, IOException {
 		useRegistry = inputStream.readBoolean();
 		registryUrl = inputStream.readUTF();
+		registrySubject = inputStream.readUTF();
 		recordClazz = (Class<? extends SpecificRecord>) inputStream.readObject();
 		schemaString = inputStream.readUTF();
+		schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
 		typeInfo = (RowTypeInfo) AvroSchemaConverter.<Row>convertToTypeInfo(schemaString);
 		schema = new Schema.Parser().parse(schemaString);
 		if (recordClazz != null) {
