@@ -134,7 +134,7 @@ public class AvroRowSerializationSchema implements SerializationSchema<Row> {
 		if (useRegistry) {
 			Preconditions.checkNotNull(registryUrl, "registryUrl must not be null");
 			Preconditions.checkNotNull(registrySubject, "registrySubject must not be null");
-			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
+			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 1000);
 		}
 		Preconditions.checkNotNull(recordClazz, "Avro record class must not be null.");
 		this.recordClazz = recordClazz;
@@ -159,7 +159,7 @@ public class AvroRowSerializationSchema implements SerializationSchema<Row> {
 		if (useRegistry) {
 			Preconditions.checkNotNull(registryUrl, "registryUrl must not be null");
 			Preconditions.checkNotNull(registrySubject, "registrySubject must not be null");
-			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
+			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 1000);
 		}
 		Preconditions.checkNotNull(avroSchemaString, "Avro schema must not be null.");
 		this.recordClazz = null;
@@ -373,7 +373,7 @@ public class AvroRowSerializationSchema implements SerializationSchema<Row> {
 		registrySubject = inputStream.readUTF();
 		recordClazz = (Class<? extends SpecificRecord>) inputStream.readObject();
 		schemaString = (String) inputStream.readObject();
-		schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
+		schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 1000);
 		if (recordClazz != null) {
 			schema = SpecificData.get().getSchema(recordClazz);
 		} else {

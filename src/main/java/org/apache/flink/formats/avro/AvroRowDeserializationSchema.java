@@ -159,7 +159,7 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 		if (useRegistry) {
 			Preconditions.checkNotNull(registryUrl, "registryUrl must not be null");
 			Preconditions.checkNotNull(registrySubject, "registrySubject must not be null");
-			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
+			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 1000);
 		}
 		Preconditions.checkNotNull(recordClazz, "Avro record class must not be null.");
 		this.recordClazz = recordClazz;
@@ -187,7 +187,7 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 		if (useRegistry) {
 			Preconditions.checkNotNull(registryUrl, "registryUrl must not be null");
 			Preconditions.checkNotNull(registrySubject, "registrySubject must not be null");
-			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
+			this.schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 1000);
 		}
 		Preconditions.checkNotNull(avroSchemaString, "Avro schema must not be null.");
 		recordClazz = null;
@@ -426,7 +426,7 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 		registrySubject = inputStream.readUTF();
 		recordClazz = (Class<? extends SpecificRecord>) inputStream.readObject();
 		schemaString = inputStream.readUTF();
-		schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 100);
+		schemaRegistry = new CachedSchemaRegistryClient(registryUrl, 1000);
 		typeInfo = (RowTypeInfo) AvroSchemaConverter.<Row>convertToTypeInfo(schemaString);
 		schema = new Schema.Parser().parse(schemaString);
 		if (recordClazz != null) {
