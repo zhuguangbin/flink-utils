@@ -19,9 +19,15 @@
 		<scala.version>2.11.12</scala.version>
 		<flink.version>1.9.1</flink.version>
 		<confluent.version>5.3.1</confluent.version>
+		<kafkaconfigclient.version>1.0.2</kafkaconfigclient.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>net.qihoo.ads.kafka</groupId>
+			<artifactId>kafka-config-client</artifactId>
+			<version>${kafkaconfigclient.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.flink</groupId>
@@ -58,10 +64,11 @@
 
 		<dependency>
 			<groupId>org.apache.flink</groupId>
-			<artifactId>flink-avro</artifactId>
+			<artifactId>flink-table-api-scala-bridge_2.11</artifactId>
 			<version>${flink.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>io.confluent</groupId>
 			<artifactId>kafka-avro-serializer</artifactId>
@@ -77,6 +84,10 @@
 				<exclusion>
 					<groupId>io.confluent</groupId>
 					<artifactId>kafka-schema-registry-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.flink</groupId>
+					<artifactId>flink-avro</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
