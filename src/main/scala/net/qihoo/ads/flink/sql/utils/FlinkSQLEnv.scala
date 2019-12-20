@@ -1,4 +1,4 @@
-package net.qihoo.ads.flink.utils
+package net.qihoo.ads.flink.sql.utils
 
 import net.qihoo.ads.kafka.KafkaConfigClient
 import org.apache.flink.api.java.typeutils.RowTypeInfo

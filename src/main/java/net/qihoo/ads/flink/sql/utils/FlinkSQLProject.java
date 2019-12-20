@@ -1,4 +1,4 @@
-package net.qihoo.ads.flink.utils;
+package net.qihoo.ads.flink.sql.utils;
 
 public class FlinkSQLProject {
     //必要参数

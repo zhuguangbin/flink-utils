@@ -1,9 +1,9 @@
-package net.qihoo.ads.flink.utils;
+package net.qihoo.ads.flink.sql.utils;
 
-public class KafkaProducerInfo {
+public class KafkaConsumerInfo {
     //必要参数
     private final String cluster;
-    private final String producerName;
+    private final String consumerName;
     private final String apiSecret;
     //可选参数
     private String desc;
@@ -12,8 +12,8 @@ public class KafkaProducerInfo {
         return cluster;
     }
 
-    public String getProducerName() {
-        return producerName;
+    public String getConsumerName() {
+        return consumerName;
     }
 
     public String getApiSecret() {
@@ -24,9 +24,9 @@ public class KafkaProducerInfo {
         return desc;
     }
 
-    private KafkaProducerInfo(Builder builder) {
+    private KafkaConsumerInfo(Builder builder) {
         this.cluster = builder.cluster;
-        this.producerName = builder.producerName;
+        this.consumerName = builder.consumerName;
         this.apiSecret = builder.apiSecret;
         this.desc = builder.desc;
     }
@@ -36,14 +36,14 @@ public class KafkaProducerInfo {
 
         //必要参数
         private final String cluster;
-        private final String producerName;
+        private final String consumerName;
         private final String apiSecret;
         //可选参数
         private String desc;
 
-        public Builder(String cluster, String producerName, String apiSecret) {
+        public Builder(String cluster, String consumerName, String apiSecret) {
             this.cluster = cluster;
-            this.producerName = producerName;
+            this.consumerName = consumerName;
             this.apiSecret = apiSecret;
         }
 
@@ -52,8 +52,8 @@ public class KafkaProducerInfo {
             return this;
         }
 
-        public KafkaProducerInfo build() {
-            return new KafkaProducerInfo(this);
+        public KafkaConsumerInfo build() {
+            return new KafkaConsumerInfo(this);
         }
     }
 
