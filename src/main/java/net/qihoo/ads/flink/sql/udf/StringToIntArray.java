@@ -11,7 +11,7 @@ public class StringToIntArray extends ScalarFunction {
 
     public Integer[] eval(String input) {
         String[] items = input.split(",");
-        if (items.length == 0) {
+        if (items.length == 1) {
             return new Integer[]{};
         } else
             return ArrayUtils.toObject(Stream.of(items).mapToInt(Integer::parseInt).toArray());
