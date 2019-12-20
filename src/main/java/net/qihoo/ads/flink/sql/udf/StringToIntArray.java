@@ -10,6 +10,9 @@ import java.util.stream.Stream;
 public class StringToIntArray extends ScalarFunction {
 
     public Integer[] eval(String input) {
+        if (input == null) {
+            return null;
+        }
         String[] items = input.split(",");
         if (items.length == 1) {
             return new Integer[]{};
