@@ -7,7 +7,7 @@ import org.apache.flink.table.functions.ScalarFunction;
 public class IntArrayToString extends ScalarFunction {
 
     public String eval(Integer[] input) {
-        return StringUtils.join("," , input);
+        return StringUtils.join(input, ",");
     }
 
 }
