@@ -204,13 +204,14 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 
 	@Override
 	public Row deserialize(byte[] message) throws IOException {
+		int schemaId = -1;
 		try {
 			if (useRegistry) {
 				ByteBuffer buffer = getByteBuffer(message);
 				// TODO: check schema version against registry
 
 				// remove first 5 bytes header
-				int id = buffer.getInt();
+				schemaId = buffer.getInt();
 				int length = buffer.limit() - 1 - 4;
 				byte[] avrobytes = new byte[length];
 				buffer.get(avrobytes, 0, length);
@@ -222,7 +223,7 @@ public class AvroRowDeserializationSchema extends AbstractDeserializationSchema<
 			record = datumReader.read(record, decoder);
 			return convertAvroRecordToRow(schema, typeInfo, record);
 		} catch (Exception e) {
-			throw new IOException("Failed to deserialize Avro record.", e);
+			throw new IOException(String.format("Failed to deserialize Avro record. Reader Schema: %s, Message schemaId: %d, record: %s ", this.schemaString, schemaId, record), e);
 		}
 	}
 
