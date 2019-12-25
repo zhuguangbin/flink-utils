@@ -1,11 +1,12 @@
-package net.qihoo.ads.flink.sql.utils
+package net.qihoo.ads.flink.env.scala
 
+import net.qihoo.ads.flink.sql.utils.FlinkSQLProject
 import net.qihoo.ads.kafka.KafkaConfigClient
 import org.apache.flink.api.java.typeutils.RowTypeInfo
 import org.apache.flink.api.scala.typeutils.Types
 import org.apache.flink.formats.avro.typeutils.AvroSchemaConverter
-import org.apache.flink.table.descriptors.{Avro, Kafka, Rowtime, Schema}
 import org.apache.flink.table.api.scala.StreamTableEnvironment
+import org.apache.flink.table.descriptors.{Avro, Kafka, Rowtime, Schema}
 import org.apache.flink.util.Preconditions
 
 object FlinkSQLEnv {
