@@ -10,7 +10,7 @@ import org.apache.flink.table.descriptors.{Avro, Kafka, Rowtime, Schema}
 import org.apache.flink.util.Preconditions
 
 object FlinkSQLEnv {
-  def registerAvroKafkaTableSource(project: FlinkSQLProject, tableEnv: StreamTableEnvironment, cluster: String, topic: String, proctime:Boolean, rowtime: Boolean, rowtimeField: String, watermarkDelay: Long) = {
+  def registerAvroKafkaTableSource(project: FlinkSQLProject, tableEnv: StreamTableEnvironment, cluster: String, topic: String, proctime: Boolean, rowtime: Boolean, rowtimeField: String, watermarkDelay: Long) = {
     Preconditions.checkNotNull(project.getKafkaConsumerInfo)
     val consumerProps = KafkaConfigClient.getConsumerConf(project.getKafkaConsumerInfo.getCluster, project.getKafkaConsumerInfo.getConsumerName, project.getKafkaConsumerInfo.getApiSecret)
     val kafkaConnector = new Kafka().version("universal").topic(topic).properties(consumerProps)
@@ -68,20 +68,20 @@ object FlinkSQLEnv {
     avroSchema
   }
 
-  private def deriveTableSchema(avroSchemaString: String, proctime:Boolean, rowtime: Boolean, rowtimeField: String, watermarkDelay: Long) = {
+  private def deriveTableSchema(avroSchemaString: String, proctime: Boolean, rowtime: Boolean, rowtimeField: String, watermarkDelayInMin: Long) = {
     val tableSchema = new Schema()
 
     if (rowtime) {
       Preconditions.checkNotNull(rowtimeField, "You must set rowtimeField when you set rowtime")
-      Preconditions.checkNotNull(watermarkDelay, "You must set watermarkDelay when you set rowtime")
+      Preconditions.checkNotNull(watermarkDelayInMin, "You must set watermarkDelay when you set rowtime")
       tableSchema
         .field("rowtime", Types.SQL_TIMESTAMP)
         .rowtime(
           new Rowtime()
             .timestampsFromField(rowtimeField)
-            .watermarksPeriodicBounded(watermarkDelay)
+            .watermarksPeriodicBounded(watermarkDelayInMin * 60 * 1000)
         )
-    } else if (proctime){
+    } else if (proctime) {
       tableSchema.field("proctime", Types.SQL_TIMESTAMP)
         .proctime()
     }
