@@ -76,10 +76,9 @@ object FlinkStreamingEnv {
       .name("KafkaThriftSource[%s]".format(topics.mkString(",")))
   }
 
-  def kafkaThriftUESourceWithTimestampAndWatermarks(topics: java.util.List[String], consumerConfig: Properties, maxOutOfOrdernessInMin: Long)(implicit env: StreamExecutionEnvironment) = {
+  def kafkaThriftUESource(topics: java.util.List[String], consumerConfig: Properties)(implicit env: StreamExecutionEnvironment) = {
     env.addSource(new FlinkKafkaConsumer[UnitedEvent](topics, new ThriftTBaseKafkaDeserializationSchema[UnitedEvent](classOf[UnitedEvent], new TBinaryProtocol.Factory()), consumerConfig))
       .name("KafkaThriftUESource[%s]".format(topics.mkString(",")))
-      .assignTimestampsAndWatermarks(new UnitedEventTimestampsAndWatermarks(org.apache.flink.streaming.api.windowing.time.Time.minutes(maxOutOfOrdernessInMin)))
   }
 
   def kafkaAvroSource[T <: SpecificRecord : ClassTag](topics: java.util.List[String], consumerConfig: Properties)(implicit evidence: TypeInformation[T], env: StreamExecutionEnvironment, schemaRegistryUrl: String) = {
