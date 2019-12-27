@@ -70,22 +70,15 @@ object FlinkStreamingEnv {
 
   }
 
-
   def kafkaThriftSource[T <: org.apache.thrift.TBase[_ <: org.apache.thrift.TBase[_ <: AnyRef, _ <: org.apache.thrift.TFieldIdEnum], _ <: org.apache.thrift.TFieldIdEnum] : ClassTag](topics: java.util.List[String], consumerConfig: Properties)(implicit evidence: TypeInformation[T], env: StreamExecutionEnvironment) = {
     env.addSource(new FlinkKafkaConsumer[T](topics, new ThriftTBaseKafkaDeserializationSchema[T](classTag[T].runtimeClass.asInstanceOf[Class[T]], new TBinaryProtocol.Factory()), consumerConfig))
       .name("KafkaThriftSource[%s]".format(topics.mkString(",")))
-  }
-
-  def kafkaThriftUESource(topics: java.util.List[String], consumerConfig: Properties)(implicit env: StreamExecutionEnvironment) = {
-    env.addSource(new FlinkKafkaConsumer[UnitedEvent](topics, new ThriftTBaseKafkaDeserializationSchema[UnitedEvent](classOf[UnitedEvent], new TBinaryProtocol.Factory()), consumerConfig))
-      .name("KafkaThriftUESource[%s]".format(topics.mkString(",")))
   }
 
   def kafkaAvroSource[T <: SpecificRecord : ClassTag](topics: java.util.List[String], consumerConfig: Properties)(implicit evidence: TypeInformation[T], env: StreamExecutionEnvironment, schemaRegistryUrl: String) = {
     env.addSource(new FlinkKafkaConsumer[T](topics, ConfluentRegistryAvroDeserializationSchema.forSpecific(classTag[T].runtimeClass.asInstanceOf[Class[T]], schemaRegistryUrl), consumerConfig))
       .name("KafkaAvroSource[%s]".format(topics.mkString(",")))
   }
-
 
   def kafkaAvroSink[T <: SpecificRecord : ClassTag](ds: DataStream[T], topic: String, producerConfig: Properties, semantic: FlinkKafkaProducer.Semantic)(implicit schemaRegistryUrl: String) = {
     ds.addSink(new FlinkKafkaProducer[T](topic, new ConfluentRegistryAvroKafkaSerializationSchema[T](topic, schemaRegistryUrl, producerConfig), producerConfig, semantic))
@@ -97,6 +90,5 @@ object FlinkStreamingEnv {
       .withBucketAssigner(new HiveDateHourPartitionBucketAssigner()).build())
       .name("HiveParquetAvroSink[%s]".format(path))
   }
-
 
 }
