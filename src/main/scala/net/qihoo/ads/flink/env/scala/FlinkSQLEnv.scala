@@ -23,6 +23,7 @@ object FlinkSQLEnv {
 
     val tableSchema = deriveTableSchema(avroSchemaStr, proctime, rowtime, rowtimeField, watermarkDelay)
 
+    val tableName = "kafka_table_source_%s".format(topic.replaceAll("\\.", "_"))
     tableEnv.connect(
       kafkaConnector
     ).withFormat(
@@ -30,8 +31,9 @@ object FlinkSQLEnv {
     ).withSchema(
       tableSchema
     ).inAppendMode()
-      .registerTableSource("kafka_table_source_%s".format(topic.replaceAll("\\.", "_")))
+      .registerTableSource(tableName)
 
+    tableName
   }
 
   def registerAvroKafkaTableSink(project: FlinkSQLProject, tableEnv: StreamTableEnvironment, cluster: String, topic: String) = {
@@ -47,6 +49,7 @@ object FlinkSQLEnv {
 
     val tableSchema = deriveTableSchema(avroSchemaStr, false, false, null, 0)
 
+    val tableName = "kafka_table_sink_%s".format(topic.replaceAll("\\.", "_"))
     tableEnv.connect(
       kafkaConnector
     ).withFormat(
@@ -54,8 +57,9 @@ object FlinkSQLEnv {
     ).withSchema(
       tableSchema
     ).inAppendMode()
-      .registerTableSink("kafka_table_sink_%s".format(topic.replaceAll("\\.", "_")))
+      .registerTableSink(tableName)
 
+    tableName
   }
 
   private def deriveAvroSchema(subject: String, avroSchemaStr: String) = {
