@@ -18,8 +18,9 @@
 
 package org.apache.flink.formats.avro.utils;
 
-import org.apache.avro.file.SeekableInput;
 import org.apache.flink.core.fs.FSDataInputStream;
+
+import org.apache.avro.file.SeekableInput;
 
 import java.io.Closeable;
 import java.io.IOException;

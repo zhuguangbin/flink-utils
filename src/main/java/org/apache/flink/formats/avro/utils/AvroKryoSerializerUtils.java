@@ -18,12 +18,6 @@
 
 package org.apache.flink.formats.avro.utils;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.Serializer;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericData;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
@@ -32,6 +26,13 @@ import org.apache.flink.api.java.typeutils.runtime.KryoRegistration;
 import org.apache.flink.api.java.typeutils.runtime.kryo.Serializers;
 import org.apache.flink.formats.avro.typeutils.AvroSerializer;
 import org.apache.flink.formats.avro.typeutils.AvroTypeInfo;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.Serializer;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
 import org.joda.time.Chronology;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -49,7 +50,7 @@ public class AvroKryoSerializerUtils extends AvroUtils {
 	@Override
 	public void addAvroSerializersIfRequired(ExecutionConfig reg, Class<?> type) {
 		if (org.apache.avro.specific.SpecificRecordBase.class.isAssignableFrom(type) ||
-			GenericData.Record.class.isAssignableFrom(type)) {
+			org.apache.avro.generic.GenericData.Record.class.isAssignableFrom(type)) {
 
 			// Avro POJOs contain java.util.List which have GenericData.Array as their runtime type
 			// because Kryo is not able to serialize them properly, we use this serializer for them
@@ -87,7 +88,7 @@ public class AvroKryoSerializerUtils extends AvroUtils {
 
 	/**
 	 * Slow serialization approach for Avro schemas.
-	 * This is only used with {{@link GenericData.Record}} types.
+	 * This is only used with {{@link org.apache.avro.generic.GenericData.Record}} types.
 	 * Having this serializer, we are able to handle avro Records.
 	 */
 	public static class AvroSchemaSerializer extends Serializer<Schema> implements Serializable {

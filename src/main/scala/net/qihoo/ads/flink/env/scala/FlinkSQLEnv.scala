@@ -6,7 +6,7 @@ import org.apache.flink.api.java.typeutils.RowTypeInfo
 import org.apache.flink.api.scala.typeutils.Types
 import org.apache.flink.formats.avro.typeutils.AvroSchemaConverter
 import org.apache.flink.table.api.scala.StreamTableEnvironment
-import org.apache.flink.table.descriptors.{Avro, Kafka, Rowtime, Schema}
+import org.apache.flink.table.descriptors.{CSRAvro, Kafka, Rowtime, Schema}
 import org.apache.flink.util.Preconditions
 
 object FlinkSQLEnv {
@@ -64,8 +64,7 @@ object FlinkSQLEnv {
 
   private def deriveAvroSchema(subject: String, avroSchemaStr: String) = {
 
-    val avroSchema = new Avro()
-      .useRegistry(true)
+    val avroSchema = new CSRAvro()
       .registryUrl(KafkaConfigClient.KAFKA_SCHEMA_REGISTRY_URL_ADDRESS)
       .registrySubject(subject)
       .avroSchema(avroSchemaStr)

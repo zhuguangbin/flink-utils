@@ -18,6 +18,13 @@
 
 package org.apache.flink.formats.avro;
 
+import org.apache.flink.api.common.serialization.DeserializationSchema;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.formats.avro.typeutils.AvroTypeInfo;
+import org.apache.flink.formats.avro.typeutils.GenericRecordAvroTypeInfo;
+import org.apache.flink.formats.avro.utils.MutableByteArrayInputStream;
+import org.apache.flink.util.Preconditions;
+
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
@@ -27,14 +34,9 @@ import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificRecord;
-import org.apache.flink.api.common.serialization.DeserializationSchema;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.formats.avro.typeutils.AvroTypeInfo;
-import org.apache.flink.formats.avro.typeutils.GenericRecordAvroTypeInfo;
-import org.apache.flink.formats.avro.utils.MutableByteArrayInputStream;
-import org.apache.flink.util.Preconditions;
 
 import javax.annotation.Nullable;
+
 import java.io.IOException;
 
 /**
@@ -88,8 +90,8 @@ public class AvroDeserializationSchema<T> implements DeserializationSchema<T> {
 	 * Creates a Avro deserialization schema.
 	 *
 	 * @param recordClazz class to which deserialize. Should be one of:
-	 *                    {@link SpecificRecord},
-	 *                    {@link GenericRecord}.
+	 *                    {@link org.apache.avro.specific.SpecificRecord},
+	 *                    {@link org.apache.avro.generic.GenericRecord}.
 	 * @param reader      reader's Avro schema. Should be provided if recordClazz is
 	 *                    {@link GenericRecord}
 	 */

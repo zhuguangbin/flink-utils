@@ -18,10 +18,11 @@
 
 package org.apache.flink.formats.avro.typeutils;
 
+import org.apache.flink.annotation.Internal;
+
 import org.apache.avro.Schema;
 import org.apache.avro.Schema.Parser;
 import org.apache.avro.reflect.Nullable;
-import org.apache.flink.annotation.Internal;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -18,6 +18,10 @@
 
 package org.apache.flink.formats.avro.typeutils;
 
+import org.apache.flink.annotation.Internal;
+import org.apache.flink.formats.avro.utils.DataInputDecoder;
+import org.apache.flink.formats.avro.utils.DataOutputEncoder;
+
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericDatumReader;
@@ -33,9 +37,6 @@ import org.apache.avro.specific.SpecificData;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
-import org.apache.flink.annotation.Internal;
-import org.apache.flink.formats.avro.utils.DataInputDecoder;
-import org.apache.flink.formats.avro.utils.DataOutputEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

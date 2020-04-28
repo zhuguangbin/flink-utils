@@ -18,11 +18,12 @@
 
 package org.apache.flink.formats.avro.typeutils;
 
-import org.apache.avro.Schema;
-import org.apache.avro.generic.GenericRecord;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
+
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericRecord;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

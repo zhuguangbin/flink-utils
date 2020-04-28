@@ -26,38 +26,63 @@ import org.apache.avro.specific.SpecificRecord;
 import java.util.Map;
 
 /**
- * Format descriptor for Apache Avro records.
+ * Format descriptor for Apache CSRAvro records.
  */
 @PublicEvolving
-public class Avro extends FormatDescriptor {
+public class CSRAvro extends FormatDescriptor {
 
+	private String registryUrl;
+	private String registrySubject;
 	private Class<? extends SpecificRecord> recordClass;
 	private String avroSchema;
 
 	/**
-	 * Format descriptor for Apache Avro records.
+	 * Format descriptor for Apache CSRAvro records.
 	 */
-	public Avro() {
-		super(AvroValidator.FORMAT_TYPE_VALUE, 1);
+	public CSRAvro() {
+		super(CSRAvroValidator.FORMAT_TYPE_VALUE, 1);
+	}
+
+
+	/**
+	 * Set schema registry url.
+	 *
+	 * @param registryUrl schema registry url.
+	 */
+	public CSRAvro registryUrl(String registryUrl) {
+		Preconditions.checkNotNull(registryUrl);
+		this.registryUrl = registryUrl;
+		return this;
 	}
 
 	/**
-	 * Sets the class of the Avro specific record.
-	 *
-	 * @param recordClass class of the Avro record.
+	 * Registry subject of schema.
+	 * @param registrySubject subject name of schema.
+	 * @return
 	 */
-	public Avro recordClass(Class<? extends SpecificRecord> recordClass) {
+	public CSRAvro registrySubject(String registrySubject) {
+		Preconditions.checkNotNull(registrySubject);
+		this.registrySubject = registrySubject;
+		return this;
+	}
+
+	/**
+	 * Sets the class of the CSRAvro specific record.
+	 *
+	 * @param recordClass class of the CSRAvro record.
+	 */
+	public CSRAvro recordClass(Class<? extends SpecificRecord> recordClass) {
 		Preconditions.checkNotNull(recordClass);
 		this.recordClass = recordClass;
 		return this;
 	}
 
 	/**
-	 * Sets the Avro schema for specific or generic Avro records.
+	 * Sets the CSRAvro schema for specific or generic CSRAvro records.
 	 *
-	 * @param avroSchema Avro schema string
+	 * @param avroSchema CSRAvro schema string.
 	 */
-	public Avro avroSchema(String avroSchema) {
+	public CSRAvro avroSchema(String avroSchema) {
 		Preconditions.checkNotNull(avroSchema);
 		this.avroSchema = avroSchema;
 		return this;
@@ -67,11 +92,17 @@ public class Avro extends FormatDescriptor {
 	protected Map<String, String> toFormatProperties() {
 		final DescriptorProperties properties = new DescriptorProperties();
 
+		if (null != registryUrl) {
+			properties.putString(CSRAvroValidator.FORMAT_REGISTRY_URL, registryUrl);
+		}
+		if (null != registrySubject) {
+			properties.putString(CSRAvroValidator.FORMAT_REGISTRY_SUBJECT, registrySubject);
+		}
 		if (null != recordClass) {
-			properties.putClass(AvroValidator.FORMAT_RECORD_CLASS, recordClass);
+			properties.putClass(CSRAvroValidator.FORMAT_RECORD_CLASS, recordClass);
 		}
 		if (null != avroSchema) {
-			properties.putString(AvroValidator.FORMAT_AVRO_SCHEMA, avroSchema);
+			properties.putString(CSRAvroValidator.FORMAT_AVRO_SCHEMA, avroSchema);
 		}
 
 		return properties.asMap();

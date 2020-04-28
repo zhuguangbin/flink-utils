@@ -24,6 +24,7 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.specific.SpecificRecord;
 
 import javax.annotation.Nullable;
+
 import java.io.IOException;
 
 /**
@@ -52,7 +53,7 @@ public class RegistryAvroDeserializationSchema<T> extends AvroDeserializationSch
 	 *                            schema reading
 	 */
 	protected RegistryAvroDeserializationSchema(Class<T> recordClazz, @Nullable Schema reader,
-                                                SchemaCoder.SchemaCoderProvider schemaCoderProvider) {
+			SchemaCoder.SchemaCoderProvider schemaCoderProvider) {
 		super(recordClazz, reader);
 		this.schemaCoderProvider = schemaCoderProvider;
 		this.schemaCoder = schemaCoderProvider.get();

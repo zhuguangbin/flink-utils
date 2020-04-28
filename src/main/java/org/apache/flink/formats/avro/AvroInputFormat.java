@@ -18,13 +18,6 @@
 
 package org.apache.flink.formats.avro;
 
-import org.apache.avro.file.DataFileReader;
-import org.apache.avro.file.SeekableInput;
-import org.apache.avro.generic.GenericDatumReader;
-import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.io.DatumReader;
-import org.apache.avro.reflect.ReflectDatumReader;
-import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.flink.api.common.io.CheckpointableInputFormat;
 import org.apache.flink.api.common.io.FileInputFormat;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -36,6 +29,14 @@ import org.apache.flink.core.fs.Path;
 import org.apache.flink.formats.avro.utils.FSDataInputStreamWrapper;
 import org.apache.flink.util.InstantiationUtil;
 import org.apache.flink.util.Preconditions;
+
+import org.apache.avro.file.DataFileReader;
+import org.apache.avro.file.SeekableInput;
+import org.apache.avro.generic.GenericDatumReader;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.io.DatumReader;
+import org.apache.avro.reflect.ReflectDatumReader;
+import org.apache.avro.specific.SpecificDatumReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ import java.io.IOException;
  *            of time.
  */
 public class AvroInputFormat<E> extends FileInputFormat<E> implements ResultTypeQueryable<E>,
-        CheckpointableInputFormat<FileInputSplit, Tuple2<Long, Long>> {
+	CheckpointableInputFormat<FileInputSplit, Tuple2<Long, Long>> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -115,7 +116,7 @@ public class AvroInputFormat<E> extends FileInputFormat<E> implements ResultType
 	private DataFileReader<E> initReader(FileInputSplit split) throws IOException {
 		DatumReader<E> datumReader;
 
-		if (GenericRecord.class == avroValueType) {
+		if (org.apache.avro.generic.GenericRecord.class == avroValueType) {
 			datumReader = new GenericDatumReader<E>();
 		} else {
 			datumReader = org.apache.avro.specific.SpecificRecordBase.class.isAssignableFrom(avroValueType)
