@@ -8,11 +8,14 @@ import org.apache.flink.formats.avro.typeutils.AvroSchemaConverter
 import org.apache.flink.table.api.scala.StreamTableEnvironment
 import org.apache.flink.table.descriptors.{CSRAvro, Kafka, Rowtime, Schema}
 import org.apache.flink.util.Preconditions
+import org.slf4j.{Logger, LoggerFactory}
 
 object FlinkSQLEnv {
+  val LOG: Logger = LoggerFactory.getLogger(this.getClass)
   def registerAvroKafkaTableSource(project: FlinkSQLProject, tableEnv: StreamTableEnvironment, cluster: String, topic: String, proctime: Boolean, rowtime: Boolean, rowtimeField: String, watermarkDelay: Long) = {
     Preconditions.checkNotNull(project.getKafkaConsumerInfo)
     val consumerProps = KafkaConfigClient.getConsumerConf(project.getKafkaConsumerInfo.getCluster, project.getKafkaConsumerInfo.getConsumerName, project.getKafkaConsumerInfo.getApiSecret)
+    LOG.info("kafka consumer: " + project.getKafkaConsumerInfo.getConsumerName + ", connector properties : " + consumerProps.toString)
     val kafkaConnector = new Kafka().version("universal").topic(topic).properties(consumerProps)
 
     val avroSchemaJson = KafkaConfigClient.latestAvroSchema(topic)
