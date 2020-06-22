@@ -7,5 +7,5 @@ deploy:
   only:
   - master@big-data/flink-utils
   script:
-  - mvn deploy && mvn -Prelease-profile clean validate versions:set && mvn -Prelease-profile -DskipTests deploy versions:revert
+  - mvn deploy && mvn -Prelease-profile clean validate versions:set && mvn -Prelease-profile -DskipTests deploy 
 
