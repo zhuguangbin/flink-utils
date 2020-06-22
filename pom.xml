@@ -10,7 +10,7 @@
 
 	<groupId>net.qihoo.ads.flink</groupId>
 	<artifactId>flink-utils</artifactId>
-	<version>1.10.0-SNAPSHOT</version>
+	<version>1.10-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<properties>
