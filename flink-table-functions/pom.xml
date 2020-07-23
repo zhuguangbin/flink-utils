@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>flink-utils_1.11</artifactId>
+        <artifactId>flink-utils</artifactId>
         <groupId>net.qihoo.ads.flink</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>..</relativePath>
@@ -13,7 +13,26 @@
     <artifactId>flink-table-functions</artifactId>
     <name>flink-table-functions</name>
     <version>0.1-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
     <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-common</artifactId>
+        </dependency>
+    </dependencies>
 
 
 </project>

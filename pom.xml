@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.qihoo.ads.flink</groupId>
-    <artifactId>flink-utils_1.11</artifactId>
+    <artifactId>flink-utils</artifactId>
     <version>0.1-SNAPSHOT</version>
     <modules>
         <module>flink-formats</module>
@@ -54,6 +54,31 @@
 
             <dependency>
                 <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-common</artifactId>
+                <version>${flink.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-api-java-bridge_2.11</artifactId>
+                <version>${flink.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-api-scala-bridge_2.11</artifactId>
+                <version>${flink.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.flink</groupId>
+                <artifactId>flink-table-planner-blink_2.11</artifactId>
+                <version>${flink.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.flink</groupId>
                 <artifactId>flink-shaded-hadoop-2</artifactId>
                 <version>2.7.5-7.0</version>
                 <scope>provided</scope>
@@ -88,26 +113,6 @@
             <dependency>
                 <groupId>org.apache.parquet</groupId>
                 <artifactId>parquet-hadoop</artifactId>
-                <version>${parquet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.parquet</groupId>
-                <artifactId>parquet-column</artifactId>
-                <version>${parquet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.parquet</groupId>
-                <artifactId>parquet-common</artifactId>
-                <version>${parquet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.parquet</groupId>
-                <artifactId>parquet-encoding</artifactId>
-                <version>${parquet.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.parquet</groupId>
-                <artifactId>parquet-jackson</artifactId>
                 <version>${parquet.version}</version>
             </dependency>
             <dependency>
