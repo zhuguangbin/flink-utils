@@ -1,11 +1,10 @@
-verify:
+test:
   script:
-  - mvn clean verify
+  - mvn clean test
 
 deploy:
   stage: deploy
   only:
   - master@big-data/flink-utils
   script:
-  - mvn deploy && mvn -Prelease-profile clean validate && mvn -Prelease-profile -DskipTests deploy 
-
+  - mvn clean deploy
