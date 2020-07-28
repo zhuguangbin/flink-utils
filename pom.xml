@@ -4,13 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.qihoo.ads.flink</groupId>
-    <artifactId>flink-utils</artifactId>
+    <artifactId>flink-utils_${flink.version}</artifactId>
     <version>0.1-SNAPSHOT</version>
     <modules>
         <module>flink-formats</module>
         <module>flink-connectors</module>
         <module>flink-helper</module>
         <module>flink-table-functions</module>
+        <module>flink-utils-bundle</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -158,12 +159,6 @@
             <!-- Add custom dependencies. -->
 
             <dependency>
-                <groupId>net.qihoo.ads.kafka</groupId>
-                <artifactId>kafka-config-client</artifactId>
-                <version>${kafkaconfigclient.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
                 <version>2.5</version>
@@ -175,6 +170,12 @@
             </dependency>
 
             <!--
+            <dependency>
+                <groupId>net.qihoo.ads.kafka</groupId>
+                <artifactId>kafka-config-client</artifactId>
+                <version>${kafkaconfigclient.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.mediav</groupId>
                 <artifactId>mv-log-format</artifactId>

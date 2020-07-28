@@ -23,13 +23,13 @@ under the License.
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>flink-formats</artifactId>
+		<artifactId>flink-formats_${flink.version}</artifactId>
 		<groupId>net.qihoo.ads.flink</groupId>
 		<version>0.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
-	<artifactId>flink-thrift</artifactId>
+	<artifactId>flink-thrift_${flink.version}</artifactId>
 	<name>flink-thrift</name>
 
 	<properties>
