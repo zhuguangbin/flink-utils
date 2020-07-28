@@ -97,7 +97,7 @@
 
             <dependency>
                 <groupId>org.apache.flink</groupId>
-                <artifactId>flink-connector-kafka_${scala.binary.version}</artifactId>
+                <artifactId>flink-sql-connector-kafka_${scala.binary.version}</artifactId>
                 <version>${flink.version}</version>
             </dependency>
 
@@ -169,37 +169,37 @@
                 <optional>true</optional>
             </dependency>
 
-            <!--
+
             <dependency>
                 <groupId>net.qihoo.ads.kafka</groupId>
                 <artifactId>kafka-config-client</artifactId>
                 <version>${kafkaconfigclient.version}</version>
             </dependency>
+            <!--
+                        <dependency>
+                            <groupId>com.mediav</groupId>
+                            <artifactId>mv-log-format</artifactId>
+                            <version>${mv-log-format.version}</version>
+                            <scope>provided</scope>
+                        </dependency>
 
-            <dependency>
-                <groupId>com.mediav</groupId>
-                <artifactId>mv-log-format</artifactId>
-                <version>${mv-log-format.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.thrift</groupId>
-                <artifactId>libthrift</artifactId>
-                <version>0.6.1</version>
-                <scope>provided</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.httpcomponents</groupId>
-                        <artifactId>httpclient</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            -->
+                        <dependency>
+                            <groupId>org.apache.thrift</groupId>
+                            <artifactId>libthrift</artifactId>
+                            <version>0.6.1</version>
+                            <scope>provided</scope>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>javax.servlet</groupId>
+                                    <artifactId>servlet-api</artifactId>
+                                </exclusion>
+                                <exclusion>
+                                    <groupId>org.apache.httpcomponents</groupId>
+                                    <artifactId>httpclient</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                        -->
         </dependencies>
     </dependencyManagement>
 

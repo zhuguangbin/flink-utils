@@ -53,7 +53,7 @@
                             <shadeTestJar>false</shadeTestJar>
                             <artifactSet>
                                 <includes>
-                                    <include>net.qihoo.ads.flink:*</include>
+                                    <include>*:*</include>
                                 </includes>
                             </artifactSet>
                             <!--
