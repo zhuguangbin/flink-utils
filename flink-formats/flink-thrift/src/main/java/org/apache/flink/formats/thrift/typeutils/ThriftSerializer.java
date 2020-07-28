@@ -471,7 +471,7 @@ public class ThriftSerializer<T extends TBase> extends TypeSerializer<T> {
 					if (codeGenerator.equals(ThriftCodeGenerator.SCROOGE)) {
 						thriftObject.setFieldValue(fieldIdEnum, ByteBuffer.wrap(buffer));
 					} else {
-						thriftObject.setFieldValue(fieldIdEnum, buffer);
+						thriftObject.setFieldValue(fieldIdEnum, ByteBuffer.wrap(buffer));
 					}
 				} else {
 					String value = inputView.readUTF();

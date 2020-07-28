@@ -181,7 +181,6 @@ under the License.
 					<target>8</target>
 				</configuration>
 			</plugin>
-			<!--
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
@@ -206,14 +205,13 @@ under the License.
 					</execution>
 				</executions>
 			</plugin>
-			-->
 
 			<!-- Generate Test class from thrift schema -->
 
-			<!--
 			<plugin>
 				<groupId>org.apache.thrift.tools</groupId>
 				<artifactId>maven-thrift-plugin</artifactId>
+				<version>0.1.11</version>
 				<configuration>
 					<thriftExecutable>/usr/local/bin/thrift</thriftExecutable>
 					<thriftTestSourceRoot>src/test/resources/thrift</thriftTestSourceRoot>
@@ -230,37 +228,36 @@ under the License.
 					</execution>
 				</executions>
 			</plugin>
-			-->
 
 
-<!--			<plugin>-->
-<!--				<groupId>com.twitter</groupId>-->
-<!--				<artifactId>scrooge-maven-plugin</artifactId>-->
-<!--				<configuration>-->
-<!--					<thriftSourceRoot>src/test/resources/scrooge</thriftSourceRoot>-->
-<!--					<language>java</language>-->
-<!--					<thriftOpts>-->
-<!--						<thriftOpt>&#45;&#45;finagle</thriftOpt>-->
-<!--						<thriftOpt>&#45;&#45;disable-strict</thriftOpt>-->
-<!--					</thriftOpts>-->
-<!--&lt;!&ndash;					 tell scrooge to not to build the extracted thrift files (defaults to true)&ndash;&gt;-->
-<!--					<buildExtractedThrift>false</buildExtractedThrift>-->
-<!--				</configuration>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>thrift-test-sources-scrooge</id>-->
-<!--						<phase>generate-sources</phase>-->
-<!--						<goals>-->
-<!--							<goal>compile</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
+			<plugin>
+				<groupId>com.twitter</groupId>
+				<artifactId>scrooge-maven-plugin</artifactId>
+				<version>${scrooge.version}</version>
+				<configuration>
+					<thriftSourceRoot>src/test/resources/scrooge</thriftSourceRoot>
+					<language>java</language>
+					<thriftOpts>
+						<thriftOpt>--finagle</thriftOpt>
+						<thriftOpt>--disable-strict</thriftOpt>
+					</thriftOpts>
+<!--					 tell scrooge to not to build the extracted thrift files (defaults to true)-->
+					<buildExtractedThrift>false</buildExtractedThrift>
+				</configuration>
+				<executions>
+					<execution>
+						<id>thrift-test-sources-scrooge</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 			<!--Remove the thriftExternalJarProgram code from the test-classes directory since it musn't be in the
 			classpath when running the tests to actually test whether the user code class loader
 			is properly used.-->
-			<!--
 			<plugin>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>2.5</version>
@@ -295,7 +292,6 @@ under the License.
 					</filesets>
 				</configuration>
 			</plugin>
-			-->
 
 			<!-- Add thrift test classes to test jar in order to test thriftTypeInfo. -->
 			<plugin>

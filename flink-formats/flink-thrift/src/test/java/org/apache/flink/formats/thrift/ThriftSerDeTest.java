@@ -36,6 +36,7 @@ import org.apache.flink.formats.thrift.generated.nested.SSColl;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

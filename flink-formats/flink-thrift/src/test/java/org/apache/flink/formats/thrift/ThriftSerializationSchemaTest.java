@@ -27,7 +27,7 @@ import org.apache.flink.formats.thrift.typeutils.ThriftTypeInfo;
 import org.apache.flink.formats.thrift.typeutils.ThriftUtils;
 import org.apache.flink.formats.thrift.utils.ThriftOutputFormat;
 import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.java.BatchTableEnvironment;
+import org.apache.flink.table.api.bridge.java.BatchTableEnvironment;
 import org.apache.flink.types.Row;
 
 import org.apache.thrift.protocol.TSimpleJSONProtocol;
@@ -100,6 +100,6 @@ public class ThriftSerializationSchemaTest {
 		}
 		thriftTableSink = (ThriftTableSink) thriftTableSink.configure(fieldNames, typeInfos);
 		tEnv.registerTableSink("my_sink", thriftTableSink);
-		thriftTableSink.emitDataSet(result);
+		thriftTableSink.consumeDataSet(result);
 	}
 }

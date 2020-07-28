@@ -21,10 +21,13 @@ package org.apache.flink.formats.thrift;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.operators.DataSink;
+import org.apache.flink.core.fs.Path;
 import org.apache.flink.formats.thrift.typeutils.ThriftSerializer;
+import org.apache.flink.formats.thrift.utils.ThriftOutputFormat;
 import org.apache.flink.formats.thrift.utils.ThriftWriter;
 import org.apache.flink.table.sinks.BatchTableSink;
 import org.apache.flink.table.sinks.TableSinkBase;
+import org.apache.flink.table.utils.TableConnectorUtils;
 import org.apache.flink.types.Row;
 
 import org.apache.thrift.protocol.TProtocol;
@@ -54,24 +57,10 @@ public class ThriftTableSink extends TableSinkBase<Row> implements BatchTableSin
 		this.thriftWriter = new ThriftWriter(new File(path), tProtocolClass);
 	}
 
-	// TODO: deprecated
-	public void emitDataSet(DataSet<Row> dataSet) {
-		try {
-			thriftWriter.open();
-			List<Row> records = dataSet.collect();
-			for (Row record: records) {
-				byte[] bytes = rowSerializationSchema.serialize(record);
-				thriftWriter.write(bytes);
-			}
-		} catch (Exception e) {
-			LOG.error("Failed to emit data", e);
-		} finally {
-			try {
-				thriftWriter.close();
-			} catch (Exception e) {
-
-			}
-		}
+	@Override
+	public DataSink<?> consumeDataSet(DataSet<Row> dataSet) {
+		DataSink sink = dataSet.output(new ThriftOutputFormat(new Path(path), tProtocolClass));
+		return sink.name(TableConnectorUtils.generateRuntimeName(ThriftTableSink.class, getFieldNames()));
 	}
 
 	public ThriftTableSink copy() {
@@ -82,9 +71,4 @@ public class ThriftTableSink extends TableSinkBase<Row> implements BatchTableSin
 		return TypeInformation.of(Row.class);
 	}
 
-	@Override
-	public DataSink<?> consumeDataSet(DataSet<Row> dataSet) {
-		// TODO
-		return null;
-	}
 }

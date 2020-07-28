@@ -25,7 +25,7 @@ import org.apache.flink.formats.thrift.ThriftCodeGenerator;
 import org.apache.flink.formats.thrift.generated.StructWithBinaryField;
 import org.apache.flink.formats.thrift.typeutils.ThriftTypeInfo;
 import org.apache.flink.table.api.Table;
-import org.apache.flink.table.api.java.BatchTableEnvironment;
+import org.apache.flink.table.api.bridge.java.BatchTableEnvironment;
 
 import org.junit.Test;
 
