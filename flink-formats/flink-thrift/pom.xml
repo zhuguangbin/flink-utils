@@ -23,7 +23,7 @@ under the License.
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>flink-formats_${flink.version}</artifactId>
+		<artifactId>flink-formats</artifactId>
 		<groupId>net.qihoo.ads.flink</groupId>
 		<version>0.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
