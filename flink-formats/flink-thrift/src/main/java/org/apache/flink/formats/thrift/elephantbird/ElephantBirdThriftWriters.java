@@ -6,6 +6,7 @@ import org.apache.flink.formats.thrift.ThriftWriterFactory;
 import com.hadoop.compression.lzo.LzopCodec;
 import com.twitter.elephantbird.mapreduce.io.RawBlockWriter;
 import com.twitter.elephantbird.mapreduce.io.ThriftBlockWriter;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.compress.CompressionOutputStream;
 import org.apache.thrift.TBase;
 
@@ -29,12 +30,14 @@ public class ElephantBirdThriftWriters {
             Class<T> type,
             OutputStream out) throws IOException {
         LzopCodec codec = new LzopCodec();
+        codec.setConf(new Configuration());
         CompressionOutputStream compressOut = codec.createOutputStream(out);
         return new ThriftBlockWriter(compressOut, type);
     }
 
     private static RawBlockWriter createLzoRawBlockWriter(OutputStream out) throws IOException {
         LzopCodec codec = new LzopCodec();
+        codec.setConf(new Configuration());
         CompressionOutputStream compressOut = codec.createOutputStream(out);
         return new RawBlockWriter(compressOut);
     }
