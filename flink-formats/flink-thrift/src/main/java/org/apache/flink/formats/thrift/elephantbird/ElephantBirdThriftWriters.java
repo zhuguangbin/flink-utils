@@ -14,9 +14,9 @@ import java.io.OutputStream;
 
 public class ElephantBirdThriftWriters {
 
-    public static <T extends TBase<?, ?>> ThriftWriterFactory<T> forThriftBlock(Class<T> type) {
+    public static <T extends TBase<?, ?>> ThriftWriterFactory<T> forLzoThriftBlock(Class<T> type) {
 
-        final ThriftBuilder<T> builder = (out) -> createThriftBlockWriter(type, out);
+        final ThriftBuilder<T> builder = (out) -> createLzoThriftBlockWriter(type, out);
         return new ThriftWriterFactory<>(builder);
     }
 
@@ -25,11 +25,12 @@ public class ElephantBirdThriftWriters {
         return new ThriftWriterFactory<byte[]>(builder);
     }
 
-    private static <T> ThriftBlockWriter createThriftBlockWriter(
+    private static <T> ThriftBlockWriter createLzoThriftBlockWriter(
             Class<T> type,
-            OutputStream out) {
-
-        return new ThriftBlockWriter(out, type);
+            OutputStream out) throws IOException {
+        LzopCodec codec = new LzopCodec();
+        CompressionOutputStream compressOut = codec.createOutputStream(out);
+        return new ThriftBlockWriter(compressOut, type);
     }
 
     private static RawBlockWriter createLzoRawBlockWriter(OutputStream out) throws IOException {
