@@ -59,6 +59,6 @@ public class ThriftBulkWriter<T> implements BulkWriter<T> {
 
 	@Override
 	public void finish() throws IOException {
-		thriftWriter.close();
+		thriftWriter.finish();
 	}
 }
