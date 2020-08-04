@@ -18,6 +18,7 @@
     <modules>
         <module>flink-thrift</module>
         <module>flink-avro</module>
+        <module>flink-avro-confluent-registry</module>
     </modules>
 
     <dependencies>
