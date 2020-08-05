@@ -3,4 +3,4 @@ deploy:
   only:
   - master@big-data/flink-utils
   script:
-  - mvn clean deploy -Pthrift-0.6
+  - mvn clean deploy -Dthrift-0.6
