@@ -224,12 +224,14 @@
 
     <distributionManagement>
         <repository>
-            <id>qihoo-releases</id>
+            <id>mediav-releases</id>
+            <name>Releases Repository</name>
             <url>https://maven.corp.mediav.com/nexus/content/repositories/releases</url>
         </repository>
         <snapshotRepository>
-            <id>qihoo-snapshots</id>
-            <url>http://maven.corp.mediav.com/nexus/content/repositories/snapshots/</url>
+            <id>mediav-snapshots</id>
+            <name>Snapshots Repository</name>
+            <url>https://maven.corp.mediav.com/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
