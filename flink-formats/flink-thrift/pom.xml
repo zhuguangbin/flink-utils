@@ -34,6 +34,8 @@ under the License.
 
 	<properties>
 		<scrooge.version>19.4.0</scrooge.version>
+		<thrift.version>0.9.3</thrift.version>
+		<elephant-bird.version>4.6</elephant-bird.version>
 	</properties>
 	<packaging>jar</packaging>
 
@@ -52,6 +54,16 @@ under the License.
 			<groupId>org.apache.thrift</groupId>
 			<artifactId>libthrift</artifactId>
 			<version>${thrift.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.httpcomponents</groupId>
+					<artifactId>httpclient</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -164,6 +176,22 @@ under the License.
 	</dependencies>
 
 	<profiles>
+		<profile>
+			<id>thrift-0.6</id>
+			<properties>
+				<thrift.version>0.6.1</thrift.version>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+		</profile>
+		<profile>
+			<id>thrift-0.9</id>
+			<properties>
+				<thrift.version>0.9.3</thrift.version>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
 		<!-- Create SQL Client uber jars by default -->
 		<profile>
 			<id>sql-jars</id>
@@ -230,7 +258,6 @@ under the License.
 			</plugin>
 
 			<!-- Generate Test class from thrift schema -->
-
 			<plugin>
 				<groupId>org.apache.thrift.tools</groupId>
 				<artifactId>maven-thrift-plugin</artifactId>
@@ -251,7 +278,6 @@ under the License.
 					</execution>
 				</executions>
 			</plugin>
-
 
 			<plugin>
 				<groupId>com.twitter</groupId>
