@@ -70,6 +70,7 @@
         <dependency>
             <groupId>net.qihoo.ads.kafka</groupId>
             <artifactId>kafka-config-client</artifactId>
+            <version>${kafkaconfigclient.version}</version>
         </dependency>
 
     </dependencies>

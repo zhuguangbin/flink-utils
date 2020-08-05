@@ -26,11 +26,8 @@
         <log4j.version>2.12.1</log4j.version>
         <parquet.version>1.10.0</parquet.version>
         <avro.version>1.8.2</avro.version>
-        <thrift.version>0.9.3</thrift.version>
-        <elephant-bird.version>4.8</elephant-bird.version>
         <hamcrest.version>1.3</hamcrest.version>
         <kafkaconfigclient.version>1.0.2</kafkaconfigclient.version>
-        <mv-log-format.version>2.1-SNAPSHOT</mv-log-format.version>
     </properties>
 
     <dependencyManagement>
@@ -93,6 +90,7 @@
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-shaded-guava</artifactId>
                 <version>18.0-${flink.shaded.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!-- Add connector dependencies here. They must be in the default scope (compile). -->
@@ -101,6 +99,7 @@
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-sql-connector-kafka_${scala.binary.version}</artifactId>
                 <version>${flink.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!-- Add flink format dependencies here. They must be in the default scope (compile). -->
@@ -109,6 +108,7 @@
                 <groupId>org.apache.flink</groupId>
                 <artifactId>flink-json</artifactId>
                 <version>${flink.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.flink</groupId>
@@ -139,24 +139,25 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-slf4j-impl</artifactId>
                 <version>${log4j.version}</version>
-                <scope>runtime</scope>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
                 <version>${log4j.version}</version>
-                <scope>runtime</scope>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>
                 <version>${log4j.version}</version>
-                <scope>runtime</scope>
+                <scope>provided</scope>
             </dependency>
 
             <!-- For dependency convergence -->
@@ -164,6 +165,7 @@
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-all</artifactId>
                 <version>${hamcrest.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <!-- Add custom dependencies. -->
@@ -179,37 +181,6 @@
                 <optional>true</optional>
             </dependency>
 
-
-            <dependency>
-                <groupId>net.qihoo.ads.kafka</groupId>
-                <artifactId>kafka-config-client</artifactId>
-                <version>${kafkaconfigclient.version}</version>
-            </dependency>
-            <!--
-                        <dependency>
-                            <groupId>com.mediav</groupId>
-                            <artifactId>mv-log-format</artifactId>
-                            <version>${mv-log-format.version}</version>
-                            <scope>provided</scope>
-                        </dependency>
-
-                        <dependency>
-                            <groupId>org.apache.thrift</groupId>
-                            <artifactId>libthrift</artifactId>
-                            <version>0.6.1</version>
-                            <scope>provided</scope>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>javax.servlet</groupId>
-                                    <artifactId>servlet-api</artifactId>
-                                </exclusion>
-                                <exclusion>
-                                    <groupId>org.apache.httpcomponents</groupId>
-                                    <artifactId>httpclient</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </dependency>
-                        -->
         </dependencies>
     </dependencyManagement>
 
