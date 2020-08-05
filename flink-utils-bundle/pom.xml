@@ -58,7 +58,10 @@
                             <shadeTestJar>false</shadeTestJar>
                             <artifactSet>
                                 <includes>
-                                    <include>*:*</include>
+                                    <include>net.qihoo.ads.flink:*</include>
+                                    <include>org.apache.avro:avro</include>
+                                    <include>io.confluent:*</include>
+                                    <include>com.twitter.elephantbird:*</include>
                                 </includes>
                             </artifactSet>
                             <!--
