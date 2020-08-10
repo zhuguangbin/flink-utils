@@ -23,6 +23,7 @@ import org.apache.flink.api.common.serialization.BulkWriter;
 import org.apache.flink.core.fs.FSDataOutputStream;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A factory that creates a Thrift {@link BulkWriter}. The factory takes a user-supplied
@@ -50,6 +51,43 @@ public class ThriftWriterFactory<T> implements BulkWriter.Factory<T> {
 
 	@Override
 	public BulkWriter<T> create(FSDataOutputStream stream) throws IOException {
-		return new ThriftBulkWriter<T>(writerBuilder.createWriter(stream));
+		return new ThriftBulkWriter<T>(writerBuilder.createWriter(new CloseShieldOutputStream(stream)));
+	}
+
+	/**
+	 * Proxy output stream that prevents the underlying output stream from being closed.
+	 */
+	private static class CloseShieldOutputStream extends OutputStream {
+		private final OutputStream out;
+
+		public CloseShieldOutputStream(OutputStream out) {
+			this.out = out;
+		}
+
+		@Override
+		public void write(int b) throws IOException {
+			out.write(b);
+		}
+
+		@Override
+		public void write(byte[] buffer) throws IOException {
+			out.write(buffer);
+		}
+
+		@Override
+		public void write(byte[] buffer, int off, int len) throws IOException {
+			out.write(buffer, off, len);
+		}
+
+		@Override
+		public void flush() throws IOException {
+			out.flush();
+		}
+
+		@Override
+		public void close() throws IOException {
+			// we do not actually close the internal stream here to prevent that the finishing
+			// of the Avro Writer closes the target output stream.
+		}
 	}
 }
