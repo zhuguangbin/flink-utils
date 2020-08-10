@@ -62,6 +62,7 @@
                                     <include>org.apache.avro:avro</include>
                                     <include>io.confluent:*</include>
                                     <include>com.twitter.elephantbird:*</include>
+                                    <include>com.hadoop.gplcompression:hadoop-lzo</include>
                                 </includes>
                             </artifactSet>
                             <!--
