@@ -97,7 +97,7 @@ public class LzoRawBlockFileSystemFormatFactory implements FileSystemFormatFacto
                 public void addElement(RowData element) throws IOException {
 
                     if (rowType.getFieldCount() == 1
-                            && rowType.getFields().get(0).getName().equals("rawvalue")
+                            && rowType.getFields().get(0).getName().equals("value")
                             && rowType.getFields().get(0).getType().getTypeRoot() == LogicalTypeRoot.VARBINARY
                             && element.getArity() == 1
                     ) {
