@@ -32,6 +32,11 @@
         </dependency>
         <dependency>
             <groupId>net.qihoo.ads.flink</groupId>
+            <artifactId>flink-raw_${flink.version}</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.qihoo.ads.flink</groupId>
             <artifactId>flink-helper_${flink.version}</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
