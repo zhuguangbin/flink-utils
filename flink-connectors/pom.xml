@@ -13,6 +13,9 @@
     <artifactId>flink-connectors</artifactId>
     <name>flink-connectors</name>
     <version>0.1-SNAPSHOT</version>
+    <modules>
+        <module>flink-connector-jdbc-ext</module>
+    </modules>
     <packaging>pom</packaging>
 
 

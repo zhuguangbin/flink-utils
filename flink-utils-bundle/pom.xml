@@ -17,6 +17,11 @@
     <dependencies>
         <dependency>
             <groupId>net.qihoo.ads.flink</groupId>
+            <artifactId>flink-connector-jdbc-ext_${flink.version}</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>net.qihoo.ads.flink</groupId>
             <artifactId>flink-avro_${flink.version}</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
