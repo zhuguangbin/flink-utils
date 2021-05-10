@@ -99,7 +99,7 @@ public class ThriftSerializationSchemaTest {
 				ThriftCodeGenerator.THRIFT);
 		}
 		thriftTableSink = (ThriftTableSink) thriftTableSink.configure(fieldNames, typeInfos);
-		tEnv.registerTableSink("my_sink", thriftTableSink);
+//		tEnv.registerTableSink("my_sink", thriftTableSink);
 		thriftTableSink.consumeDataSet(result);
 	}
 }
