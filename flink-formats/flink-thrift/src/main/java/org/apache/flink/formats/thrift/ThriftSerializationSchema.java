@@ -33,11 +33,8 @@ import org.slf4j.LoggerFactory;
 public class ThriftSerializationSchema<T extends TBase> implements SerializationSchema<T> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ThriftSerializationSchema.class);
-	private TSerializer serializer;
 
-	public ThriftSerializationSchema(Class<T> recordClazz) {
-		this.serializer = new TSerializer();
-	}
+	public ThriftSerializationSchema(Class<T> recordClazz) {}
 
 	public byte[] serialize(T element) {
 		byte[] message = null;

@@ -31,7 +31,7 @@ import java.io.IOException;
  * ThriftDeserializationSchema that extends DeserializationSchema interface.
  * @param <T> The Thrift class.
  */
-public class ThriftDeserializationSchema<T extends TBase> implements DeserializationSchema {
+public class ThriftDeserializationSchema<T extends TBase> implements DeserializationSchema<T> {
 
 	private Class<T> thriftClazz;
 	private ThriftCodeGenerator codeGenerator;
@@ -49,12 +49,12 @@ public class ThriftDeserializationSchema<T extends TBase> implements Deserializa
 			instance = thriftClazz.newInstance();
 			deserializer.deserialize(instance, message);
 		} catch (Exception e) {
-
+			throw new IOException(e);
 		}
 		return instance;
 	}
 
-	public boolean isEndOfStream(Object nextElement) {
+	public boolean isEndOfStream(T nextElement) {
 		return false;
 	}
 
