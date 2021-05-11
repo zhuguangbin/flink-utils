@@ -1,6 +1,7 @@
 deploy:
-  stage: deploy
+  tags:
+  - maven
   only:
   - master@big-data/flink-utils
   script:
-  - mvn clean deploy -Dthrift-0.6 -DskipTests
+  - mvn deploy -Dthrift-0.13 -DskipTests
