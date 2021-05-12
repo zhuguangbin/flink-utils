@@ -4,4 +4,4 @@ deploy:
   only:
   - flink-1.12@big-data/flink-utils
   script:
-  - mvn deploy -Dthrift-0.13 -DskipTests
+  - mvn clean deploy -Dthrift-0.13 -DskipTests
