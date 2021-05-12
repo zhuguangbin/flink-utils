@@ -91,7 +91,7 @@ import static org.apache.flink.table.filesystem.ConfigurableFileSystemTableFacto
 import static org.apache.flink.table.filesystem.stream.compact.CompactOperator.convertToUncompacted;
 
 /** File system {@link DynamicTableSink}. */
-public class ConfigurableFileSystemTableSink extends AbstractFileSystemTable
+public class ConfigurableFileSystemTableSink extends AbstractFSTable
         implements DynamicTableSink, SupportsPartitioning, SupportsOverwrite {
 
     // For compaction reading

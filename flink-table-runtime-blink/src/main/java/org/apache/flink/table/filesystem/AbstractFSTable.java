@@ -34,7 +34,7 @@ import static org.apache.flink.table.filesystem.FileSystemOptions.PARTITION_DEFA
 import static org.apache.flink.table.filesystem.FileSystemOptions.PATH;
 
 /** Abstract File system table for providing some common methods. */
-abstract class AbstractFileSystemTable {
+abstract class AbstractFSTable {
 
     final DynamicTableFactory.Context context;
     final ObjectIdentifier tableIdentifier;
@@ -44,7 +44,7 @@ abstract class AbstractFileSystemTable {
     final Path path;
     final String defaultPartName;
 
-    AbstractFileSystemTable(DynamicTableFactory.Context context) {
+    AbstractFSTable(DynamicTableFactory.Context context) {
         this.context = context;
         this.tableIdentifier = context.getObjectIdentifier();
         this.tableOptions = new Configuration();
