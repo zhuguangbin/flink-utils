@@ -55,6 +55,12 @@ public class ClickHouseDialect extends AbstractDialect {
 		return new MySQLRowConverter(rowType);
 	}
 
+	// TODO: not implemented
+	@Override
+	public String getLimitClause(long l) {
+		return null;
+	}
+
 	@Override
 	public Optional<String> defaultDriverName() {
 		return Optional.of("ru.yandex.clickhouse.ClickHouseDriver");
@@ -73,6 +79,36 @@ public class ClickHouseDialect extends AbstractDialect {
 				.map(f -> quoteIdentifier(f))
 				.collect(Collectors.joining(", "));
 		return Optional.of(getInsertIntoStatement(tableName, fieldNames));
+	}
+
+	// TODO: not implemented
+	@Override
+	public String getRowExistsStatement(String tableName, String[] conditionFields) {
+		return super.getRowExistsStatement(tableName, conditionFields);
+	}
+
+	// TODO: not implemented
+	@Override
+	public String getInsertIntoStatement(String tableName, String[] fieldNames) {
+		return super.getInsertIntoStatement(tableName, fieldNames);
+	}
+
+	// TODO: not implemented
+	@Override
+	public String getUpdateStatement(String tableName, String[] fieldNames, String[] conditionFields) {
+		return super.getUpdateStatement(tableName, fieldNames, conditionFields);
+	}
+
+	// TODO: not implemented
+	@Override
+	public String getDeleteStatement(String tableName, String[] conditionFields) {
+		return super.getDeleteStatement(tableName, conditionFields);
+	}
+
+	// TODO: not implemented
+	@Override
+	public String getSelectFromStatement(String tableName, String[] selectFields, String[] conditionFields) {
+		return super.getSelectFromStatement(tableName, selectFields, conditionFields);
 	}
 
 	@Override

@@ -7,9 +7,7 @@
     <artifactId>flink-utils</artifactId>
     <version>0.1-SNAPSHOT</version>
     <modules>
-        <module>flink-formats</module>
         <module>flink-connectors</module>
-        <module>flink-table-runtime-blink</module>
         <module>flink-utils-bundle</module>
     </modules>
     <packaging>pom</packaging>
@@ -18,8 +16,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.binary.version>2.11</scala.binary.version>
         <scala.version>2.11.12</scala.version>
-        <flink.binary.version>1.12</flink.binary.version>
-        <flink.version>1.12.2</flink.version>
+        <flink.binary.version>1.13</flink.binary.version>
+        <flink.version>1.13.1</flink.version>
         <flink.shaded.version>11.0</flink.shaded.version>
         <slf4j.version>1.7.15</slf4j.version>
         <log4j.version>2.12.1</log4j.version>

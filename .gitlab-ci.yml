@@ -2,6 +2,6 @@ deploy:
   tags:
   - maven
   only:
-  - flink-1.12@big-data/flink-utils
+  - flink-1.13@big-data/flink-utils
   script:
-  - mvn clean deploy -Dthrift-0.13 -DskipTests
+  - mvn clean deploy -DskipTests
