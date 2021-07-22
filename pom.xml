@@ -18,7 +18,7 @@
         <scala.version>2.11.12</scala.version>
         <flink.binary.version>1.13</flink.binary.version>
         <flink.version>1.13.1</flink.version>
-        <flink.shaded.version>11.0</flink.shaded.version>
+        <flink.shaded.version>13.0</flink.shaded.version>
         <slf4j.version>1.7.15</slf4j.version>
         <log4j.version>2.12.1</log4j.version>
         <parquet.version>1.10.0</parquet.version>
