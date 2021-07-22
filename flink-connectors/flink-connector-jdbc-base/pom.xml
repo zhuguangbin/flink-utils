@@ -6,36 +6,25 @@
         <artifactId>flink-connectors</artifactId>
         <groupId>net.qihoo.ads.flink</groupId>
         <version>0.1-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flink-connector-jdbc-ext_${flink.version}</artifactId>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
-
+    <artifactId>flink-connector-jdbc-base_${flink.version}</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-jdbc_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-table-common</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.yandex.clickhouse</groupId>
-            <artifactId>clickhouse-jdbc</artifactId>
-            <version>0.2.4</version>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -48,18 +37,30 @@
                         </goals>
                         <configuration>
                             <shadeTestJar>false</shadeTestJar>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>module-info.class</exclude>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <artifactSet>
                                 <includes>
-                                    <include>net.qihoo.ads.flink:*</include>
-                                    <include>org.apache.flink:flink-connector-jdbc_2.11</include>
-                                    <include>ru.yandex.clickhouse:clickhouse-jdbc</include>
-                                    <include>org.apache.httpcomponents:*</include>
-                                    <include>com.google.guava:guava</include>
+                                    <include>net.qihoo.ads.flink:flink-connector-jdbc-base_${flink.version}</include>
+                                    <include>org.apache.flink:flink-connector-jdbc_${scala.binary.version}</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

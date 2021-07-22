@@ -18,8 +18,8 @@
 
 package org.apache.flink.connector.jdbc.dialect;
 
+import org.apache.flink.connector.jdbc.internal.converter.ClickHouseRowConverter;
 import org.apache.flink.connector.jdbc.internal.converter.JdbcRowConverter;
-import org.apache.flink.connector.jdbc.internal.converter.MySQLRowConverter;
 import org.apache.flink.table.types.logical.LogicalTypeRoot;
 import org.apache.flink.table.types.logical.RowType;
 
@@ -52,7 +52,7 @@ public class ClickHouseDialect extends AbstractDialect {
 
 	@Override
 	public JdbcRowConverter getRowConverter(RowType rowType) {
-		return new MySQLRowConverter(rowType);
+		return new ClickHouseRowConverter(rowType);
 	}
 
 	// TODO: not implemented

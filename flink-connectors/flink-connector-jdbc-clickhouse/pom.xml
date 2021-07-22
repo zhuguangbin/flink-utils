@@ -3,32 +3,38 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>flink-utils</artifactId>
+        <artifactId>flink-connectors</artifactId>
         <groupId>net.qihoo.ads.flink</groupId>
         <version>0.1-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flink-utils-bundle_${flink.version}</artifactId>
-    <name>flink-utils-bundle</name>
-    <packaging>jar</packaging>
+    <artifactId>flink-connector-jdbc-clickhouse_${flink.version}</artifactId>
+
+    <properties>
+        <clickhouse.jdbc.version>0.2.4</clickhouse.jdbc.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>net.qihoo.ads.flink</groupId>
             <artifactId>flink-connector-jdbc-base_${flink.version}</artifactId>
             <version>${project.parent.version}</version>
+            <scope>provided</scope>
         </dependency>
+
         <dependency>
-            <groupId>net.qihoo.ads.flink</groupId>
-            <artifactId>flink-connector-jdbc-aerospike_${flink.version}</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>ru.yandex.clickhouse</groupId>
+            <artifactId>clickhouse-jdbc</artifactId>
+            <version>${clickhouse.jdbc.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>net.qihoo.ads.flink</groupId>
-            <artifactId>flink-connector-jdbc-clickhouse_${flink.version}</artifactId>
-            <version>${project.parent.version}</version>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-common</artifactId>
+            <version>${flink.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -36,10 +42,15 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>shade-flink-utils</id>
+                        <id>shade-flink-jdbc</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -57,11 +68,30 @@
                                     </excludes>
                                 </filter>
                             </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.google.common</pattern>
+                                    <shadedPattern>org.apache.flink.clickhouse.shaded.com.google.common</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.fasterxml.jackson</pattern>
+                                    <shadedPattern>org.apache.flink.clickhouse.shaded.com.fasterxml.jackson</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.http</pattern>
+                                    <shadedPattern>org.apache.flink.clickhouse.shaded.org.apache.http</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
         </plugins>
-    </build>
+        </build>
 
 </project>

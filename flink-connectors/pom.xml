@@ -9,14 +9,14 @@
         <relativePath>..</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>flink-connectors</artifactId>
-    <name>flink-connectors</name>
-    <version>0.1-SNAPSHOT</version>
-    <modules>
-        <module>flink-connector-jdbc-ext</module>
-    </modules>
     <packaging>pom</packaging>
 
+    <artifactId>flink-connectors</artifactId>
+
+    <modules>
+        <module>flink-connector-jdbc-base</module>
+        <module>flink-connector-jdbc-aerospike</module>
+        <module>flink-connector-jdbc-clickhouse</module>
+    </modules>
 
 </project>
