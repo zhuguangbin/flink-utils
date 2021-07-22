@@ -15,21 +15,21 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>net.qihoo.ads.flink</groupId>
             <artifactId>flink-connector-jdbc-base_${flink.version}</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>net.qihoo.ads.flink</groupId>
             <artifactId>flink-connector-jdbc-aerospike_${flink.version}</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>net.qihoo.ads.flink</groupId>
             <artifactId>flink-connector-jdbc-clickhouse_${flink.version}</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
 
     <build>
