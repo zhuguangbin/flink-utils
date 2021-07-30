@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -16,9 +17,11 @@ public class ConcurrentExecutor extends AbstractExternalPersister {
     private static final int REJECT_WAITING_MILLIS = 100;
     private static final int REJECT_WAITING_RETRY = 3;
     private ExecutorService executor;
+    private final ThreadPoolQueueMonitor queueMonitor;
     public ConcurrentExecutor(IAerospikeClient client, ExecutorService executor) {
         super(client);
         this.executor = executor;
+        this.queueMonitor = new ThreadPoolQueueMonitor((ThreadPoolExecutor) executor, 1000);
     }
 
     @Override
@@ -57,9 +60,31 @@ public class ConcurrentExecutor extends AbstractExternalPersister {
             }
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e.getMessage(), e);
+        } finally {
+            queueMonitor.trigger();
         }
         logger.info(String.format("concurrent execute size: %d, batch: %d, cost: %d ms", entities.size(), BATCH_THRESHOLD, System.currentTimeMillis() - st));
         return new int[] {total};
+    }
+
+    static class ThreadPoolQueueMonitor {
+        final ThreadPoolExecutor executor;
+        int lastSize;
+        final int monitorDelta;
+
+        public ThreadPoolQueueMonitor(ThreadPoolExecutor executor, int monitorDelta) {
+            this.executor = executor;
+            this.lastSize = 0;
+            this.monitorDelta = monitorDelta;
+        }
+
+        public synchronized void trigger() {
+           int currSize = executor.getQueue().size();
+           if (currSize / monitorDelta != lastSize / monitorDelta) {
+               logger.info(String.format("now concurrent queue size is %d, while last value is %d", currSize, lastSize));
+           }
+           lastSize = currSize;
+        }
     }
 
 }
