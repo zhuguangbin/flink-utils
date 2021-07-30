@@ -4,6 +4,8 @@ import com.aerospike.client.AerospikeException;
 import com.aerospike.client.Bin;
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.Key;
+import com.aerospike.client.policy.CommitLevel;
+import com.aerospike.client.policy.Replica;
 import com.aerospike.client.policy.WritePolicy;
 import com.aerospike.jdbc.util.URLParser;
 
@@ -19,6 +21,8 @@ public abstract class AbstractExternalPersister implements ExternalPersistExecut
     public AbstractExternalPersister(IAerospikeClient client) {
         this.client = client;
         writePolicy = new WritePolicy(URLParser.getWritePolicy());
+        writePolicy.replica = Replica.MASTER_PROLES;
+        writePolicy.commitLevel = CommitLevel.COMMIT_MASTER;
         writePolicy.sendKey = true;
     }
 
