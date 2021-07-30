@@ -29,8 +29,7 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +59,7 @@ public class AerospikeConnection implements Connection, SimpleWrapper {
     private volatile boolean closed;
 
     private ExecutorService es;
+    private static final int concurrentQueueCap = 10_000;
 
     public AerospikeConnection(String url, Properties props) {
         this.url = url;
@@ -69,7 +69,7 @@ public class AerospikeConnection implements Connection, SimpleWrapper {
                 URLParser.getClientPolicy(), URLParser.getHosts()
         );
         schema.set(URLParser.getSchema()); // namespace
-        ThreadPoolExecutor tpe = new ThreadPoolExecutor(2, 8, 60, TimeUnit.SECONDS, new SynchronousQueue<>(),
+        ThreadPoolExecutor tpe = new ThreadPoolExecutor(2, 8, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(concurrentQueueCap),
                 new ThreadFactory() {
                     AtomicInteger nextId = new AtomicInteger();
                     @Override

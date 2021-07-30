@@ -34,7 +34,7 @@ public class BatchQueryHandler extends BaseQueryHandler {
 
     public int[] executeBatch(AerospikeQuery query) {
         List<ExternalPersistExecutor.BatchEntity> entities = query.getType().equals(QueryType.DELETE) ? buildDelete(query) : buildUpsert(query);
-        return externalPersistExecutor.execute(entities);
+        return entities.size() > 0 ? externalPersistExecutor.execute(entities) : new int[]{0};
     }
 
     private List<ExternalPersistExecutor.BatchEntity> buildUpsert(AerospikeQuery query) {

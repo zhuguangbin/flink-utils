@@ -16,9 +16,13 @@ public class SequentialExecutor extends AbstractExternalPersister {
         int cnt = 0;
         long st = System.currentTimeMillis();
         for(BatchEntity entity : entities) {
-            if (entity.type.equals(BatchType.DELETE)) {
-                delete(entity.key);
-            } else put(entity.key, entity.bins);
+            try {
+                if (entity.type.equals(BatchType.DELETE)) {
+                    delete(entity.key);
+                } else put(entity.key, entity.bins);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
             ++ cnt;
         }
         logger.info(String.format("sequence execute size: %d, cost: %d ms", entities.size(), System.currentTimeMillis() - st));
