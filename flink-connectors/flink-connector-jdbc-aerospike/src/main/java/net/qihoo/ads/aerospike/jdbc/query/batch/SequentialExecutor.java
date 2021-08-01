@@ -1,14 +1,15 @@
 package net.qihoo.ads.aerospike.jdbc.query.batch;
 
 import com.aerospike.client.IAerospikeClient;
+import com.aerospike.client.policy.WritePolicy;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 public class SequentialExecutor extends AbstractExternalPersister {
     private static final Logger logger = Logger.getLogger(SequentialExecutor.class.getName());
-    public SequentialExecutor(IAerospikeClient client) {
-        super(client);
+    public SequentialExecutor(WritePolicy wp, IAerospikeClient client) {
+        super(wp, client);
     }
 
     @Override

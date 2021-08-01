@@ -3,6 +3,7 @@ package net.qihoo.ads.aerospike.jdbc.query.batch;
 import com.aerospike.client.Bin;
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.Key;
+import com.aerospike.client.policy.WritePolicy;
 import com.aerospike.jdbc.AerospikeConnection;
 import com.aerospike.jdbc.model.AerospikeQuery;
 import com.aerospike.jdbc.model.Pair;
@@ -22,9 +23,9 @@ public class BatchQueryHandler extends BaseQueryHandler {
 
     private ExternalPersistExecutor externalPersistExecutor;
 
-    public BatchQueryHandler(IAerospikeClient client, Statement statement) throws SQLException {
+    public BatchQueryHandler(WritePolicy wp, IAerospikeClient client, Statement statement) throws SQLException {
         super(client, statement);
-        this.externalPersistExecutor = new DelegateExecutor(client, ((AerospikeConnection)statement.getConnection()).getEs());
+        this.externalPersistExecutor = new DelegateExecutor(wp, client, ((AerospikeConnection)statement.getConnection()).getEs());
     }
 
     @Override
@@ -47,7 +48,7 @@ public class BatchQueryHandler extends BaseQueryHandler {
                     key = new Key(query.getSchema(), query.getTable(), getBinValue(p[i].toString()));
                 } else{
                     int binIndex = i < keyIndex ? i : i - 1;
-                    bins[binIndex] = new Bin(IOUtils.stripQuotes(query.getColumns().get(i)).trim(), getBinValue(p[i].toString()));
+                    bins[binIndex] = new Bin(IOUtils.stripQuotes(query.getColumns().get(i)).trim(), getBinValue(String.valueOf(p[i])));
                 }
             }
             return new ExternalPersistExecutor.BatchEntity(key, bins);

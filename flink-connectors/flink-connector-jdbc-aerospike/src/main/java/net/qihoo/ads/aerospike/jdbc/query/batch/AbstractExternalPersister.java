@@ -18,9 +18,9 @@ public abstract class AbstractExternalPersister implements ExternalPersistExecut
     private IAerospikeClient client;
     private WritePolicy writePolicy;
 
-    public AbstractExternalPersister(IAerospikeClient client) {
+    public AbstractExternalPersister(WritePolicy wp, IAerospikeClient client) {
         this.client = client;
-        writePolicy = new WritePolicy(URLParser.getWritePolicy());
+        writePolicy = new WritePolicy(wp);
         writePolicy.replica = Replica.MASTER_PROLES;
         writePolicy.commitLevel = CommitLevel.COMMIT_MASTER;
         writePolicy.sendKey = true;
@@ -58,5 +58,9 @@ public abstract class AbstractExternalPersister implements ExternalPersistExecut
 
     public IAerospikeClient getClient() {
         return client;
+    }
+
+    public WritePolicy getWritePolicy() {
+        return writePolicy;
     }
 }

@@ -1,5 +1,6 @@
 package com.aerospike.jdbc.model;
 
+import com.aerospike.jdbc.AerospikeStatement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,6 +27,8 @@ public class AerospikeQuery {
     private List<String> columns;
 
     private List<Object[]> queryBindings;
+
+    private AerospikeStatement statement;
 
     public AerospikeQuery() {
         this.type = QueryType.UNKNOWN;
@@ -181,6 +184,14 @@ public class AerospikeQuery {
 
     public List<Object[]> getQueryBindings() {
         return queryBindings;
+    }
+
+    public void setStatement(AerospikeStatement statement) {
+        this.statement = statement;
+    }
+
+    public AerospikeStatement getStatement() {
+        return statement;
     }
 
     @Override

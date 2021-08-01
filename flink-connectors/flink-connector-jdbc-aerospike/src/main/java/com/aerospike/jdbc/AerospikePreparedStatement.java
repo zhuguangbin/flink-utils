@@ -3,12 +3,8 @@ package com.aerospike.jdbc;
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.Value;
 import com.aerospike.jdbc.model.AerospikeQuery;
-import com.aerospike.jdbc.model.DataColumn;
 import com.aerospike.jdbc.query.AerospikeQueryParser;
 import net.qihoo.ads.aerospike.jdbc.query.batch.BatchQueryHandler;
-import com.aerospike.jdbc.schema.AerospikeSchemaBuilder;
-import com.aerospike.jdbc.sql.AerospikeResultSetMetaData;
-import com.aerospike.jdbc.sql.SimpleParameterMetaData;
 import com.aerospike.jdbc.sql.type.ByteArrayBlob;
 import com.aerospike.jdbc.sql.type.StringClob;
 import com.aerospike.jdbc.util.AuxStatementParser;
@@ -25,7 +21,6 @@ import java.net.URL;
 import java.sql.*;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -36,9 +31,8 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
 
     private static final Logger logger = Logger.getLogger(AerospikePreparedStatement.class.getName());
 
-    private final String sql;
-    private final List<DataColumn> columns;
-    private final AerospikeQuery query;
+//    private final List<DataColumn> columns;
+
     private Object[] parameterValues;
 
     public AerospikePreparedStatement(IAerospikeClient client, Connection connection, String sql) throws SQLException {
@@ -48,7 +42,8 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
         parameterValues = new Object[n];
         Arrays.fill(parameterValues, Optional.empty());
         query = parseQuery(sql, connection);
-        columns = AerospikeSchemaBuilder.getSchema(query.getSchemaTable(), client);
+        query.setStatement(this);
+//        columns = AerospikeSchemaBuilder.getSchema(query.getSchemaTable(), client);
     }
 
     private AerospikeQuery parseQuery(String sql, Connection connection) throws SQLException {
@@ -205,7 +200,7 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
 
     @Override
     public int[] executeBatch() throws SQLException {
-        BatchQueryHandler queryHandler = new BatchQueryHandler(client, this);
+        BatchQueryHandler queryHandler = new BatchQueryHandler(((AerospikeConnection)getConnection()).up.getWritePolicy(), client, this);
         return queryHandler.executeBatch(query);
     }
 
@@ -235,8 +230,9 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
     }
 
     @Override
-    public ResultSetMetaData getMetaData() {
-        return new AerospikeResultSetMetaData(query.getSchema(), query.getTable(), columns);
+    public ResultSetMetaData getMetaData() throws SQLFeatureNotSupportedException {
+//        return new AerospikeResultSetMetaData(query.getSchema(), query.getTable(), columns);
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
@@ -265,8 +261,9 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
     }
 
     @Override
-    public ParameterMetaData getParameterMetaData() {
-        return new SimpleParameterMetaData(columns);
+    public ParameterMetaData getParameterMetaData() throws SQLFeatureNotSupportedException {
+//        return new SimpleParameterMetaData(columns);
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override

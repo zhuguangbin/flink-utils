@@ -1,10 +1,15 @@
 package org.apache.flink.connector.jdbc.internal.converter;
 
+import org.apache.flink.table.data.GenericRowData;
+import org.apache.flink.table.data.RowData;
 import org.apache.flink.table.data.StringData;
 import org.apache.flink.table.types.logical.LogicalType;
 import org.apache.flink.table.types.logical.RowType;
 
 import com.aerospike.client.Value;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AerospikeRowConverter extends AbstractJdbcRowConverter {
     public AerospikeRowConverter(RowType rowType) {
@@ -12,8 +17,17 @@ public class AerospikeRowConverter extends AbstractJdbcRowConverter {
     }
 
     @Override
-    protected JdbcDeserializationConverter createNullableInternalConverter(LogicalType type) {
-        return super.createNullableInternalConverter(type);
+    public RowData toInternal(ResultSet resultSet) throws SQLException {
+        GenericRowData genericRowData = new GenericRowData(this.rowType.getFieldCount());
+        for(int pos = 0; pos < this.rowType.getFieldCount(); ++pos) {
+            Object field = resultSet.getObject(this.rowType.getFields().get(pos).getName());
+            if (field == null) {
+                genericRowData.setField(pos, null);
+            } else {
+                genericRowData.setField(pos, this.toInternalConverters[pos].deserialize(field));
+            }
+        }
+        return genericRowData;
     }
 
     @Override

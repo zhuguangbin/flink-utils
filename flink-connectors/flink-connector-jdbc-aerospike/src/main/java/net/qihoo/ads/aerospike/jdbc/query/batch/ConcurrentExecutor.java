@@ -1,6 +1,7 @@
 package net.qihoo.ads.aerospike.jdbc.query.batch;
 
 import com.aerospike.client.IAerospikeClient;
+import com.aerospike.client.policy.WritePolicy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,8 @@ public class ConcurrentExecutor extends AbstractExternalPersister {
     private static final int REJECT_WAITING_RETRY = 3;
     private ExecutorService executor;
     private final ThreadPoolQueueMonitor queueMonitor;
-    public ConcurrentExecutor(IAerospikeClient client, ExecutorService executor) {
-        super(client);
+    public ConcurrentExecutor(WritePolicy wp, IAerospikeClient client, ExecutorService executor) {
+        super(wp, client);
         this.executor = executor;
         this.queueMonitor = new ThreadPoolQueueMonitor((ThreadPoolExecutor) executor, 1000);
     }

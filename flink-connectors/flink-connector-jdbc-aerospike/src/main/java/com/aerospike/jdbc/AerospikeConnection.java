@@ -2,7 +2,6 @@ package com.aerospike.jdbc;
 
 import com.aerospike.client.AerospikeClient;
 import com.aerospike.client.IAerospikeClient;
-import com.aerospike.client.Value;
 import com.aerospike.client.policy.Policy;
 import com.aerospike.jdbc.sql.SimpleWrapper;
 import com.aerospike.jdbc.sql.type.ByteArrayBlob;
@@ -53,22 +52,23 @@ public class AerospikeConnection implements Connection, SimpleWrapper {
     private final IAerospikeClient client;
     private volatile boolean readOnly = false;
     private final Properties clientInfo = new Properties();
+
     private volatile Map<String, Class<?>> typeMap = emptyMap();
     private volatile int holdability = HOLD_CURSORS_OVER_COMMIT;
     private final AtomicReference<String> schema = new AtomicReference<>(null); // namespace
     private volatile boolean closed;
+    protected URLParser up;
 
     private ExecutorService es;
     private static final int concurrentQueueCap = 10_000;
 
     public AerospikeConnection(String url, Properties props) {
         this.url = url;
-        URLParser.parseUrl(url, props);
-        Value.UseBoolBin = false; // flink jdbc cannot propagate url parameters, manual set to false
+        up = URLParser.parseUrl(url, props);
         client = new AerospikeClient(
-                URLParser.getClientPolicy(), URLParser.getHosts()
+                up.getClientPolicy(), up.getHosts()
         );
-        schema.set(URLParser.getSchema()); // namespace
+        schema.set(up.getSchema()); // namespace
         ThreadPoolExecutor tpe = new ThreadPoolExecutor(2, 8, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(concurrentQueueCap),
                 new ThreadFactory() {
                     AtomicInteger nextId = new AtomicInteger();
@@ -366,6 +366,10 @@ public class AerospikeConnection implements Connection, SimpleWrapper {
 
     public ExecutorService getEs() {
         return es;
+    }
+
+    public URLParser getUp() {
+        return up;
     }
 
     @Override
