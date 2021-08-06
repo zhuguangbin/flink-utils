@@ -188,6 +188,10 @@ public class AerospikeQuery {
         return queryBindings;
     }
 
+    public void resetQueryBindings() {
+        this.queryBindings.clear();
+    }
+
     public void setStatement(AerospikeStatement statement) {
         this.statement = statement;
     }

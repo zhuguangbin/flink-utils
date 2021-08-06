@@ -62,8 +62,10 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
         logger.debug("AerospikePreparedStatement executeQuery");
         if (parameterValues != null && parameterValues.length > 0) {
             this.query.addNewQueryBinding(this.parameterValues);
+            clearParameters();
         }
         Pair<ResultSet, Integer> result = QueryPerformer.executeQuery(client, this, this.query);
+        this.query.resetQueryBindings();
         resultSet = result.getLeft();
         updateCount = result.getRight();
         return resultSet;
@@ -197,13 +199,16 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
     public void addBatch() {
         logger.debug("AerospikePreparedStatement addBatch: {}", Arrays.toString(this.parameterValues));
         this.query.addNewQueryBinding(this.parameterValues);
+        clearParameters();
     }
 
     @Override
     public int[] executeBatch() throws SQLException {
         logger.debug("AerospikePreparedStatement executeBatch");
         BatchQueryHandler queryHandler = new BatchQueryHandler(((AerospikeConnection)getConnection()).up.getWritePolicy(), client, this);
-        return queryHandler.executeBatch(query);
+        int[] rst = queryHandler.executeBatch(query);
+        query.resetQueryBindings();
+        return rst;
     }
 
     @Override
