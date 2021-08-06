@@ -3,12 +3,16 @@ package com.aerospike.jdbc;
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.Value;
 import com.aerospike.jdbc.model.AerospikeQuery;
+import com.aerospike.jdbc.model.Pair;
 import com.aerospike.jdbc.query.AerospikeQueryParser;
+import com.aerospike.jdbc.query.QueryPerformer;
 import net.qihoo.ads.aerospike.jdbc.query.batch.BatchQueryHandler;
 import com.aerospike.jdbc.sql.type.ByteArrayBlob;
 import com.aerospike.jdbc.sql.type.StringClob;
 import com.aerospike.jdbc.util.AuxStatementParser;
 import com.aerospike.jdbc.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -22,16 +26,12 @@ import java.sql.*;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import static com.aerospike.jdbc.util.PreparedStatement.parseParameters;
 import static java.lang.String.format;
 
 public class AerospikePreparedStatement extends AerospikeStatement implements PreparedStatement {
-
-    private static final Logger logger = Logger.getLogger(AerospikePreparedStatement.class.getName());
-
-//    private final List<DataColumn> columns;
+    private static final Logger logger = LoggerFactory.getLogger(AerospikeConnection.class);
 
     private Object[] parameterValues;
 
@@ -43,7 +43,6 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
         Arrays.fill(parameterValues, Optional.empty());
         query = parseQuery(sql, connection);
         query.setStatement(this);
-//        columns = AerospikeSchemaBuilder.getSchema(query.getSchemaTable(), client);
     }
 
     private AerospikeQuery parseQuery(String sql, Connection connection) throws SQLException {
@@ -60,14 +59,19 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
 
     @Override
     public ResultSet executeQuery() {
-        logger.info("AerospikePreparedStatement executeQuery");
-        return super.executeQuery(sql);
+        logger.debug("AerospikePreparedStatement executeQuery");
+        if (parameterValues != null && parameterValues.length > 0) {
+            this.query.addNewQueryBinding(this.parameterValues);
+        }
+        Pair<ResultSet, Integer> result = QueryPerformer.executeQuery(client, this, this.query);
+        resultSet = result.getLeft();
+        updateCount = result.getRight();
+        return resultSet;
     }
 
     @Override
-    public int executeUpdate() {
-        logger.info("AerospikePreparedStatement executeUpdate");
-        return super.executeUpdate(sql);
+    public int executeUpdate() throws SQLException {
+        throw new SQLFeatureNotSupportedException();
     }
 
     @Override
@@ -162,7 +166,6 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
 
     @Override
     public void clearParameters() {
-        parameterValues = new Object[parameterValues.length];
         Arrays.fill(parameterValues, Optional.empty());
     }
 
@@ -182,10 +185,8 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
     }
 
     @Override
-    public boolean execute() {
-        String preparedQuery = prepareQuery();
-        logger.info(preparedQuery);
-        return execute(preparedQuery);
+    public boolean execute() throws SQLException {
+        throw new SQLFeatureNotSupportedException();
     }
 
     private String prepareQuery() {
@@ -194,12 +195,13 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
 
     @Override
     public void addBatch() {
+        logger.debug("AerospikePreparedStatement addBatch: {}", Arrays.toString(this.parameterValues));
         this.query.addNewQueryBinding(this.parameterValues);
-        clearParameters();
     }
 
     @Override
     public int[] executeBatch() throws SQLException {
+        logger.debug("AerospikePreparedStatement executeBatch");
         BatchQueryHandler queryHandler = new BatchQueryHandler(((AerospikeConnection)getConnection()).up.getWritePolicy(), client, this);
         return queryHandler.executeBatch(query);
     }
@@ -231,7 +233,6 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
 
     @Override
     public ResultSetMetaData getMetaData() throws SQLFeatureNotSupportedException {
-//        return new AerospikeResultSetMetaData(query.getSchema(), query.getTable(), columns);
         throw new SQLFeatureNotSupportedException();
     }
 
@@ -262,7 +263,6 @@ public class AerospikePreparedStatement extends AerospikeStatement implements Pr
 
     @Override
     public ParameterMetaData getParameterMetaData() throws SQLFeatureNotSupportedException {
-//        return new SimpleParameterMetaData(columns);
         throw new SQLFeatureNotSupportedException();
     }
 

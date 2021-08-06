@@ -179,7 +179,9 @@ public class AerospikeQuery {
     }
 
     public void addNewQueryBinding(Object[] binding) {
-        queryBindings.add(binding);
+        Object[] one = new Object[binding.length];
+        System.arraycopy(binding, 0, one, 0, binding.length);
+        queryBindings.add(one);
     }
 
     public List<Object[]> getQueryBindings() {

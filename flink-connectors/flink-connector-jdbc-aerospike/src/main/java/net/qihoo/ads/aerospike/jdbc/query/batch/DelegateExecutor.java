@@ -5,10 +5,8 @@ import com.aerospike.client.policy.WritePolicy;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.logging.Logger;
 
 public class DelegateExecutor extends AbstractExternalPersister {
-    private static final Logger logger = Logger.getLogger(DelegateExecutor.class.getName());
 
     private ExternalPersistExecutor persistExecutor;
 

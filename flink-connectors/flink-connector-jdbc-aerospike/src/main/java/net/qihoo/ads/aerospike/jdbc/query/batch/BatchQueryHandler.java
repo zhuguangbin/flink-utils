@@ -45,7 +45,7 @@ public class BatchQueryHandler extends BaseQueryHandler {
             Bin[] bins = new Bin[p.length - 1];
             for (int i = 0;i < p.length;++i) {
                 if (i == keyIndex) {
-                    key = new Key(query.getSchema(), query.getTable(), getBinValue(p[i].toString()));
+                    key = new Key(query.getSchema(), query.getTable(), getBinValue(String.valueOf(p[i])));
                 } else{
                     int binIndex = i < keyIndex ? i : i - 1;
                     bins[binIndex] = new Bin(IOUtils.stripQuotes(query.getColumns().get(i)).trim(), getBinValue(String.valueOf(p[i])));
@@ -57,7 +57,7 @@ public class BatchQueryHandler extends BaseQueryHandler {
 
     private List<ExternalPersistExecutor.BatchEntity> buildDelete(AerospikeQuery query) {
         return query.getQueryBindings().stream().map(o -> {
-            Key key = new Key(query.getSchema(), query.getTable(), getBinValue(o[0].toString()));
+            Key key = new Key(query.getSchema(), query.getTable(), getBinValue(String.valueOf(o[0])));
             return new ExternalPersistExecutor.BatchEntity(key);
         }).collect(Collectors.toList());
     }

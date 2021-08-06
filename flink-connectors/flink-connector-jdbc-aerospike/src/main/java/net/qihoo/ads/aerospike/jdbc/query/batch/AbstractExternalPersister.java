@@ -8,10 +8,14 @@ import com.aerospike.client.policy.CommitLevel;
 import com.aerospike.client.policy.Replica;
 import com.aerospike.client.policy.WritePolicy;
 import com.aerospike.jdbc.util.URLParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public abstract class AbstractExternalPersister implements ExternalPersistExecutor {
+    private static final Logger logger = LoggerFactory.getLogger(AbstractExternalPersister.class);
     public static final int BATCH_THRESHOLD = 200;
     public static final int RETRY_BACKOFF_MILLIS = 100;
     public static final int RETRY_BACKOFF_MAX = 3;
@@ -31,6 +35,7 @@ public abstract class AbstractExternalPersister implements ExternalPersistExecut
         while (true) {
             try {
                 client.put(writePolicy, key, bins);
+                logger.debug("success put record, key: {}, bins: {}", key.toString(), Arrays.toString(bins));
                 return;
             } catch (AerospikeException e) {
                 if (i++ >= RETRY_BACKOFF_MAX) {
@@ -46,6 +51,7 @@ public abstract class AbstractExternalPersister implements ExternalPersistExecut
         while (true) {
             try {
                 client.delete(writePolicy, key);
+                logger.debug("success delete record, key: {}", key.toString());
                 return;
             } catch (AerospikeException e) {
                 if (i++ >= RETRY_BACKOFF_MAX) {

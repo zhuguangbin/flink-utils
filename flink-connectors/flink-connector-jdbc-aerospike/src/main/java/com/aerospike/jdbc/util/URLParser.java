@@ -6,17 +6,17 @@ import com.aerospike.client.policy.ClientPolicy;
 import com.aerospike.client.policy.ScanPolicy;
 import com.aerospike.client.policy.WritePolicy;
 import com.aerospike.jdbc.scan.EventLoopProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class URLParser {
-
-    private static final Logger logger = Logger.getLogger(URLParser.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(URLParser.class);
 
     private static final String defaultAerospikePort = "3000";
     private static final int defaultRecordsPerSecond = 512;

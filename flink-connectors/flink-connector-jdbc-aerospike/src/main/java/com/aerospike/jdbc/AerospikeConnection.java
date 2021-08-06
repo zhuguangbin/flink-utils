@@ -7,6 +7,8 @@ import com.aerospike.jdbc.sql.SimpleWrapper;
 import com.aerospike.jdbc.sql.type.ByteArrayBlob;
 import com.aerospike.jdbc.sql.type.StringClob;
 import com.aerospike.jdbc.util.URLParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -34,7 +36,6 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.logging.Logger;
 
 import static java.lang.String.format;
 import static java.sql.ResultSet.CLOSE_CURSORS_AT_COMMIT;
@@ -45,8 +46,7 @@ import static java.util.Arrays.stream;
 import static java.util.Collections.emptyMap;
 
 public class AerospikeConnection implements Connection, SimpleWrapper {
-
-    private static final Logger logger = Logger.getLogger(AerospikeConnection.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(AerospikeConnection.class);
 
     private final String url;
     private final IAerospikeClient client;
@@ -135,7 +135,7 @@ public class AerospikeConnection implements Connection, SimpleWrapper {
 
     @Override
     public DatabaseMetaData getMetaData() {
-        logger.info("getMetaData request");
+        logger.debug("getMetaData request");
         return new AerospikeDatabaseMetadata(url, client, this);
     }
 

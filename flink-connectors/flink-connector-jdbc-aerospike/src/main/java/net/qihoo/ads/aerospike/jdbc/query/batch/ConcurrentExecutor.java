@@ -2,6 +2,8 @@ package net.qihoo.ads.aerospike.jdbc.query.batch;
 
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.policy.WritePolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +13,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 public class ConcurrentExecutor extends AbstractExternalPersister {
-    private static final Logger logger = Logger.getLogger(ConcurrentExecutor.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(ConcurrentExecutor.class);
     private static final int REJECT_WAITING_MILLIS = 100;
     private static final int REJECT_WAITING_RETRY = 3;
     private ExecutorService executor;

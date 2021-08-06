@@ -9,6 +9,8 @@ import com.aerospike.jdbc.sql.SimpleWrapper;
 import com.aerospike.jdbc.util.AuxStatementParser;
 import io.trino.sql.parser.ParsingOptions;
 import io.trino.sql.parser.SqlParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,15 +18,13 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 import static io.trino.sql.parser.ParsingOptions.DecimalLiteralTreatment.AS_DOUBLE;
 import static java.lang.String.format;
 import static java.sql.ResultSet.*;
 
 public class AerospikeStatement implements Statement, SimpleWrapper {
-
-    private static final Logger logger = Logger.getLogger(AerospikeStatement.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(AerospikeStatement.class);
 
     public static final SqlParser SQL_PARSER = new SqlParser();
     public static final ParsingOptions parsingOptions = new ParsingOptions(AS_DOUBLE);
@@ -33,26 +33,21 @@ public class AerospikeStatement implements Statement, SimpleWrapper {
     private final Connection connection;
     private int maxRows = Integer.MAX_VALUE;
     private int queryTimeout;
-    private ResultSet resultSet;
-    private int updateCount;
+    ResultSet resultSet;
+    int updateCount;
     private String schema;
-
     String sql;
     AerospikeQuery query;
 
-    public AerospikeStatement(IAerospikeClient client, Connection connection) {
+    public AerospikeStatement(IAerospikeClient client, Connection connection) throws SQLException {
         this.client = client;
         this.connection = connection;
-        try {
-            this.schema = connection.getSchema();
-        } catch (SQLException e) {
-            logger.warning(e.getMessage());
-        }
+        this.schema = connection.getSchema();
     }
 
     @Override
     public ResultSet executeQuery(String sql) {
-        logger.info("executeQuery: " + sql);
+        logger.debug("executeQuery: " + sql);
         this.sql = sql;
         this.query = parseQuery(sql);
         this.query.setStatement(this);
@@ -73,6 +68,10 @@ public class AerospikeStatement implements Statement, SimpleWrapper {
             query.setSchema(schema);
         }
         return query;
+    }
+
+    public String getSql() {
+        return sql;
     }
 
     @Override

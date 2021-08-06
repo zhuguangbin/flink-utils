@@ -1,28 +1,34 @@
 package com.aerospike.jdbc.query;
 
+import org.apache.flink.connector.jdbc.table.JdbcRowDataLookupFunction;
+
 import com.aerospike.client.IAerospikeClient;
 import com.aerospike.client.Key;
 import com.aerospike.client.Value;
 import com.aerospike.client.policy.ScanPolicy;
 import com.aerospike.client.query.KeyRecord;
+import com.aerospike.jdbc.AerospikePreparedStatement;
 import com.aerospike.jdbc.model.AerospikeQuery;
 import com.aerospike.jdbc.model.DataColumn;
 import com.aerospike.jdbc.model.Pair;
+import com.aerospike.jdbc.model.WhereExpression;
 import com.aerospike.jdbc.scan.PartitionScanHandler;
 import com.aerospike.jdbc.scan.RecordSet;
 import com.aerospike.jdbc.sql.AerospikeRecordResultSet;
 import com.aerospike.jdbc.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.aerospike.jdbc.query.PolicyBuilder.buildGetPolicy;
@@ -31,8 +37,7 @@ import static com.aerospike.jdbc.query.PolicyBuilder.buildScanPolicy;
 import static com.aerospike.jdbc.util.AerospikeUtils.getTableRecordsNumber;
 
 public class SelectQueryHandler extends BaseQueryHandler {
-
-    private static final Logger logger = Logger.getLogger(SelectQueryHandler.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(JdbcRowDataLookupFunction.class);
 
     public SelectQueryHandler(IAerospikeClient client, Statement statement) {
         super(client, statement);
@@ -40,22 +45,28 @@ public class SelectQueryHandler extends BaseQueryHandler {
 
     @Override
     public Pair<ResultSet, Integer> execute(AerospikeQuery query) {
-//        columns = AerospikeSchemaBuilder.getSchema(query.getSchemaTable(), client);
-        Object keyObject = ExpressionBuilder.fetchPrimaryKey(query.getWhere());
         Pair<ResultSet, Integer> result;
         if (isCount(query)) {
+            if (Objects.nonNull(query.getWhere())) {
+                throw new RuntimeException("only support count without where");
+            }
             result = executeCountQuery(query);
-        } else if (Objects.nonNull(keyObject)) {
-            result = executeSelectByPrimaryKey(query, getBinValue(keyObject.toString()));
+        } else if (query.getStatement() instanceof AerospikePreparedStatement) {
+            if (ExpressionBuilder.fetchPrimaryKey(query.getWhere()) != null) {
+                result = executeSelectByPrimaryKey(query, getBinValue(String.valueOf(query.getQueryBindings().get(0)[0])));
+            } else result = executePrepareScanQuery(query);
         } else {
-            result = executeScanQuery(query);
+            Object keyObject = ExpressionBuilder.fetchPrimaryKey(query.getWhere());
+            if (Objects.nonNull(keyObject)) {
+                result = executeSelectByPrimaryKey(query, getBinValue(keyObject.toString()));
+            } else {
+                result = executeScanQuery(query);
+            }
         }
-
         return result;
     }
 
     private Pair<ResultSet, Integer> executeCountQuery(AerospikeQuery query) {
-        logger.info("SELECT count");
         String countLabel = query.getColumns().get(0);
         int recordNumber;
         if (Objects.isNull(query.getWhere())) {
@@ -63,7 +74,6 @@ public class SelectQueryHandler extends BaseQueryHandler {
         } else {
             ScanPolicy policy = buildScanNoBinDataPolicy(query);
             RecordSet recordSet = PartitionScanHandler.create(client).scanPartition(policy, query);
-
             final AtomicInteger count = new AtomicInteger();
             recordSet.forEach(r -> count.incrementAndGet());
             recordNumber = count.get();
@@ -83,7 +93,7 @@ public class SelectQueryHandler extends BaseQueryHandler {
     }
 
     private Pair<ResultSet, Integer> executeSelectByPrimaryKey(AerospikeQuery query, Value primaryKey) {
-        logger.info("SELECT PK");
+        logger.debug("SELECT by pk: {}, params: {}", query.getStatement().getSql(), primaryKey.toString());
         Key key = new Key(query.getSchema(), query.getTable(), primaryKey);
         com.aerospike.client.Record record = client.get(buildGetPolicy(query), key, query.getBinNames());
 
@@ -102,14 +112,32 @@ public class SelectQueryHandler extends BaseQueryHandler {
     }
 
     private Pair<ResultSet, Integer> executeScanQuery(AerospikeQuery query) {
-        logger.info("SELECT scan");
-
+        logger.debug("SELECT by scan: {}, params: {}", query.getStatement().getSql(), query.getQueryBindings() != null && query.getQueryBindings().size() == 1 ? Arrays.toString(query.getQueryBindings().get(0)) : "");
         ScanPolicy policy = buildScanPolicy(query);
         RecordSet recordSet = PartitionScanHandler.create(client).scanPartition(policy, query);
-
         return new Pair<>(new AerospikeRecordResultSet(recordSet, statement, query.getSchema(),
                 query.getTable(), filterColumns(Collections.emptyList(), query.getBinNames())), -1);
     }
+
+    private Pair<ResultSet, Integer> executePrepareScanQuery(AerospikeQuery query) {
+        if (query.getWhere() != null) {
+            setFilter(Collections.singletonList(query.getWhere()), query.getQueryBindings().get(0), 0);
+        }
+        return executeScanQuery(query);
+    }
+
+    private int setFilter(Collection<WhereExpression> exps, Object[] params, int idx) {
+        for (WhereExpression exp : exps) {
+            if (exp.isWrapper()) {
+                idx = setFilter(exp.getInner(), params, idx);
+            } else {
+                exp.setValue(params[idx]);
+                idx ++;
+            }
+        }
+        return idx;
+    }
+
 
     private boolean isCount(AerospikeQuery query) {
         return query.getColumns().size() == 1 &&
