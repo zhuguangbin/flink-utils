@@ -17,20 +17,11 @@ public class DelegateExecutor extends AbstractExternalPersister {
 
     @Override
     public int[] execute(List<BatchEntity> entities) {
-        /*int cnt = entities.size();
-        if (cnt < BATCH_THRESHOLD) {
+        // int cnt = entities.size();
+        if (/*cnt < BATCH_THRESHOLD*/true) {  // since concurrent thread output perform bad, we currently force using SequentialExecutor
             return new SequentialExecutor(getWritePolicy(), getClient()).execute(entities);
         }
-        return persistExecutor.execute(entities);*/
-
-        // sequential for performance test
-        int total = 0;
-        for (int start = 0, end; start < entities.size(); start = end) {
-            end = Math.min(start + BATCH_THRESHOLD, entities.size());
-            final List<BatchEntity> toPersist = entities.subList(start, end);
-            total += new SequentialExecutor(getWritePolicy(), getClient()).execute(toPersist)[0];
-        }
-        return new int[]{total};
+        return persistExecutor.execute(entities);
     }
 
 }

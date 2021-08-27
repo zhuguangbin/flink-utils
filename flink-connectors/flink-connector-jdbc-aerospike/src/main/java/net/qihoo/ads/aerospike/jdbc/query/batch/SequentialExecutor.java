@@ -27,7 +27,7 @@ public class SequentialExecutor extends AbstractExternalPersister {
             }
             ++ cnt;
         }
-        logger.info(String.format("sequence execute size: %d, cost: %d ms", entities.size(), System.currentTimeMillis() - st));
+        logger.debug(String.format("sequence execute size: %d, cost: %d ms", entities.size(), System.currentTimeMillis() - st));
         return new int[]{cnt};
     }
 

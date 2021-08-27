@@ -69,7 +69,7 @@ public class AerospikeConnection implements Connection, SimpleWrapper {
                 up.getClientPolicy(), up.getHosts()
         );
         schema.set(up.getSchema()); // namespace
-        ThreadPoolExecutor tpe = new ThreadPoolExecutor(2, 8, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(concurrentQueueCap),
+        ThreadPoolExecutor tpe = new ThreadPoolExecutor(0, 8, 60, TimeUnit.SECONDS, new LinkedBlockingDeque<>(concurrentQueueCap),
                 new ThreadFactory() {
                     AtomicInteger nextId = new AtomicInteger();
                     @Override
