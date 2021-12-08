@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>flink-json-in-tsv</artifactId>
+    <artifactId>flink-thrift-json</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -37,6 +37,10 @@
             <artifactId>flink-shaded-jackson</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.thrift</groupId>
+            <artifactId>libthrift</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
