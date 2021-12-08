@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>flink-json-in-tsv</module>
+        <module>flink-thrift-json</module>
     </modules>
 
     <properties>
