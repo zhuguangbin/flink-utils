@@ -37,7 +37,7 @@ CREATE TABLE `test_table` (
 'topic'='e.c.6',
 'format'='thrift-json',
 'thrift-json.thrift-class'='com.mediav.data.log.unitedlog.UnitedEvent',
-'properties.bootstrap.servers'='test-kf1.adsys.shbt2.qihoo.net:9092,test-kf2.adsys.shbt2.qihoo.net:9092,test-kf3.adsys.shbt2.qihoo.net:9092'
+'properties.bootstrap.servers'='YOUR-KAFKA-BOOTSTRAP-SERVERS'
 );
 
 ```
